@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Modality } from "@google/genai";
 
 const fileToBase64 = (file: File): Promise<string> => {
@@ -22,35 +21,55 @@ export const editImageWithGemini = async (imageFile: File, prompt: string): Prom
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const base64Image = await fileToBase64(imageFile);
 
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
-      contents: {
-        parts: [
-          {
-            inlineData: {
-              data: base64Image,
-              mimeType: imageFile.type,
-            },
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash-image',
+    contents: {
+      parts: [
+        {
+          inlineData: {
+            data: base64Image,
+            mimeType: imageFile.type,
           },
-          {
-            text: prompt,
-          },
-        ],
-      },
-      config: {
-        responseModalities: [Modality.IMAGE],
-      },
-    });
+        },
+        {
+          text: prompt,
+        },
+      ],
+    },
+    config: {
+      responseModalities: [Modality.IMAGE],
+    },
+  });
 
-    const firstPart = response.candidates?.[0]?.content?.parts?.[0];
-    if (firstPart && 'inlineData' in firstPart && firstPart.inlineData) {
-      return firstPart.inlineData.data;
-    } else {
-      throw new Error("AI did not return an image. It may have refused the request due to safety policies. Please try a different prompt.");
-    }
-  } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    throw new Error("Failed to edit image with AI. Please check the console for more details.");
+  // A successful response should have candidates with content.
+  if (!response.candidates || response.candidates.length === 0) {
+      const blockReason = response.promptFeedback?.blockReason;
+      const blockMessage = response.promptFeedback?.blockReasonMessage;
+      let errorMessage = "AI response was blocked, which may be due to safety policies. Please adjust your prompt and try again.";
+      if (blockReason) {
+          errorMessage = `Request was blocked for reason: ${blockReason}.`;
+          if (blockMessage) {
+              errorMessage += ` Details: ${blockMessage}`;
+          }
+      }
+      throw new Error(errorMessage);
   }
+  
+  // Find the part containing image data
+  const imagePart = response.candidates[0].content?.parts?.find(
+      (part) => !!part.inlineData
+  );
+
+  if (imagePart && imagePart.inlineData) {
+    return imagePart.inlineData.data;
+  } 
+  
+  // If no image part, check for a text response, which might explain the refusal.
+  const textResponse = response.text;
+  if (textResponse && textResponse.trim()) {
+      throw new Error(`AI did not return an image, but provided a text response: "${textResponse.trim()}"`);
+  }
+
+  // Fallback error if the response is malformed or empty in an unexpected way.
+  throw new Error("AI did not return an image. The response may have been empty or refused due to safety policies. Please try a different prompt.");
 };
