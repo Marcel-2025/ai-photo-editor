@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { SparklesIcon } from './IconComponents';
+import { SparklesIcon, GoogleIcon, FacebookIcon } from './IconComponents';
 
 export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -12,10 +12,14 @@ export const Login: React.FC = () => {
       login(username.trim());
     }
   };
+  
+  const handleSocialLogin = (provider: 'Google' | 'Facebook') => {
+    login(`${provider} User`);
+  };
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] flex items-center justify-center font-sans p-4">
-      <div className="w-full max-w-md p-8 space-y-8 bg-[var(--background-secondary)] rounded-2xl shadow-2xl border border-[var(--border-primary)]">
+      <div className="w-full max-w-md p-8 space-y-6 bg-[var(--background-secondary)] rounded-2xl shadow-2xl border border-[var(--border-primary)]">
         <div className="flex flex-col items-center">
           <SparklesIcon className="w-16 h-16 text-[var(--accent-primary)] mb-4" />
           <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] text-center">
@@ -25,7 +29,33 @@ export const Login: React.FC = () => {
             Sign in to start creating. New users get 300 free credits!
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        
+        <div className="space-y-4">
+            <button
+                type="button"
+                onClick={() => handleSocialLogin('Google')}
+                className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-[var(--border-secondary)] rounded-md text-sm font-medium text-[var(--text-primary)] bg-[var(--background-primary)] hover:bg-[var(--border-primary)] transition-colors"
+            >
+                <GoogleIcon className="w-5 h-5" />
+                Continue with Google
+            </button>
+             <button
+                type="button"
+                onClick={() => handleSocialLogin('Facebook')}
+                className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-[var(--border-secondary)] rounded-md text-sm font-medium text-[var(--text-primary)] bg-[var(--background-primary)] hover:bg-[var(--border-primary)] transition-colors"
+            >
+                <FacebookIcon className="w-5 h-5" />
+                Continue with Facebook
+            </button>
+        </div>
+
+        <div className="flex items-center justify-center space-x-2">
+            <hr className="w-full border-t border-[var(--border-secondary)]" />
+            <span className="text-xs text-[var(--text-secondary)] uppercase">OR</span>
+            <hr className="w-full border-t border-[var(--border-secondary)]" />
+        </div>
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm">
             <div>
               <label htmlFor="username" className="sr-only">
