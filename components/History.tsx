@@ -80,11 +80,11 @@ export const History: React.FC = () => {
                 {formatDate(selectedImage.id)}
               </p>
             </div>
-            <div className="flex-1 p-4 overflow-auto">
+            <div className="flex-1 p-4 flex items-center justify-center overflow-hidden min-h-0">
               <img
                 src={selectedImage.edited}
                 alt={selectedImage.prompt}
-                className="w-full h-auto max-h-full object-contain mx-auto rounded-md"
+                className="max-w-full max-h-full object-contain rounded-md"
               />
             </div>
             <button
