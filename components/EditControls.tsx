@@ -25,15 +25,15 @@ export const EditControls: React.FC<EditControlsProps> = ({
   canRedo,
 }) => {
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 flex flex-col md:flex-row items-center gap-4 shadow-2xl mt-8">
+    <div className="bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-6 flex flex-col md:flex-row items-center gap-4 shadow-2xl mt-8">
       <div className="relative flex-grow w-full">
-        <MagicWandIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <MagicWandIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-secondary)]" />
         <input
           type="text"
           value={prompt}
           onChange={onPromptChange}
           placeholder="e.g., 'Add a superhero cape to the person'"
-          className="w-full bg-gray-700/50 border border-gray-600 rounded-lg py-3 pl-12 pr-4 text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          className="w-full bg-[var(--background-secondary)] border border-[var(--border-secondary)] rounded-lg py-3 pl-12 pr-4 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors"
           disabled={isLoading}
         />
       </div>
@@ -41,7 +41,7 @@ export const EditControls: React.FC<EditControlsProps> = ({
         <button
           onClick={onEdit}
           disabled={isLoading || !prompt.trim()}
-          className="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
+          className="w-full md:w-auto flex items-center justify-center gap-2 bg-[var(--accent-primary)] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[var(--accent-primary-hover)] disabled:bg-[var(--border-primary)] disabled:text-[var(--text-secondary)] disabled:cursor-not-allowed transition-colors"
         >
           {isLoading ? 'Generating...' : 'Generate (20 Cr)'}
         </button>
@@ -49,7 +49,7 @@ export const EditControls: React.FC<EditControlsProps> = ({
         <button
           onClick={onUndo}
           title="Undo Variation"
-          className="p-3 ml-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 disabled:bg-gray-600/50 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+          className="p-3 ml-2 bg-[var(--background-secondary)] border border-[var(--border-secondary)] text-[var(--text-primary)] rounded-lg hover:bg-[var(--border-primary)] disabled:bg-[var(--background-tertiary)] disabled:text-[var(--text-secondary)] disabled:cursor-not-allowed transition-colors"
           disabled={isLoading || !canUndo}
         >
           <UndoIcon className="w-6 h-6" />
@@ -57,7 +57,7 @@ export const EditControls: React.FC<EditControlsProps> = ({
         <button
           onClick={onRedo}
           title="Redo Variation"
-          className="p-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 disabled:bg-gray-600/50 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+          className="p-3 bg-[var(--background-secondary)] border border-[var(--border-secondary)] text-[var(--text-primary)] rounded-lg hover:bg-[var(--border-primary)] disabled:bg-[var(--background-tertiary)] disabled:text-[var(--text-secondary)] disabled:cursor-not-allowed transition-colors"
           disabled={isLoading || !canRedo}
         >
           <RedoIcon className="w-6 h-6" />
@@ -66,7 +66,7 @@ export const EditControls: React.FC<EditControlsProps> = ({
          <button
           onClick={onClear}
           title="Start Over with New Image"
-          className="p-3 bg-red-600/80 text-white rounded-lg hover:bg-red-700 disabled:bg-gray-600 transition-colors"
+          className="p-3 bg-[var(--danger-primary)] text-white rounded-lg hover:bg-[var(--danger-primary-hover)] disabled:bg-gray-600 transition-colors"
           disabled={isLoading}
         >
           <TrashIcon className="w-6 h-6" />

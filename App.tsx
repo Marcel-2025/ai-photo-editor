@@ -18,6 +18,7 @@ import { PremiumModal } from './components/PremiumModal';
 import { VariationsDisplay } from './components/VariationsDisplay';
 import { QualityControls, PortraitQuality } from './components/QualityControls';
 import { History } from './components/History';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 
 const FILTERS: Filter[] = [
   { name: 'None', css: 'none' },
@@ -57,6 +58,38 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "in the style of ancient Egyptian hieroglyphs",
         "as a vibrant graffiti mural",
         "in a minimalist line art style",
+        "in the style of Vincent Van Gogh",
+        "as a surrealist painting by Salvador Dalí",
+        "in an Art Nouveau style",
+        "as a retro 80s synthwave poster",
+        "in a heavy metal album cover style",
+        "as a technical blueprint drawing",
+        "in a low-poly geometric style",
+        "as a thermal camera image",
+        "in the style of ukiyo-e Japanese woodblock prints",
+        "as an intricate mandala pattern",
+        "in a psychedelic, trippy art style",
+        "as a high-fashion magazine cover",
+        "in a gritty, graphic novel style",
+        "as a detailed map from a fantasy novel",
+        "in the style of impressionist painter Claude Monet",
+        "as an abstract expressionist piece",
+        "in a photorealistic style",
+        "as a Banksy-style street art stencil",
+        "in a Tim Burton-esque spooky style",
+        "as an architectural concept sketch",
+        "in the style of illuminated manuscripts",
+        "as a propaganda poster",
+        "in a storybook fairytale style",
+        "as a pointillism painting",
+        "in a mosaic tile art style",
+        "as a 3D render",
+        "in a vaporwave aesthetic",
+        "as a blueprint schematic",
+        "in a gothic art style",
+        "as a cinematic film still",
+        "in a bold, colorful Fauvist style",
+        "as a carved wooden sculpture",
     ],
     "Lighting & Mood": [
         "with dramatic, cinematic lighting",
@@ -75,6 +108,38 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "with an apocalyptic, red-sky glow",
         "with dreamy, pastel-colored light",
         "with a single, focused spotlight",
+        "with bioluminescent glowing plants",
+        "with the northern lights (aurora borealis) in the sky",
+        "with harsh, direct sunlight creating sharp shadows",
+        "with lens flare effects",
+        "with underwater light caustics",
+        "with a dark, stormy sky and lightning",
+        "with a peaceful, serene twilight mood",
+        "with a vibrant, energetic feel",
+        "with a romantic, soft-focus look",
+        "with a lonely, isolated atmosphere",
+        "with a nostalgic, faded photo look",
+        "with an ominous, foreboding mood",
+        "with a chaotic, action-packed atmosphere",
+        "with a celebratory, festive lighting",
+        "with a calm, meditative ambiance",
+        "with a gritty, urban feel",
+        "with a sense of wonder and awe",
+        "with a playful, whimsical mood",
+        "with a futuristic, clean-room lighting",
+        "with a post-apocalyptic, desolate mood",
+        "with a majestic, epic scale",
+        "with an intimate, close-up feeling",
+        "with a cold, wintery light",
+        "with a hot, desert sun haze",
+        "with colorful disco lights",
+        "with light filtering through tree leaves",
+        "with a low-key lighting setup",
+        "with a high-key, bright white lighting",
+        "with the reflection of a city skyline at night",
+        "with a campfire as the main light source",
+        "with a mysterious silhouette against a bright background",
+        "with a heavenly, divine glow",
     ],
     "Scene & Background": [
         "Extend the image",
@@ -93,6 +158,38 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "place them on the rings of Saturn",
         "put them in a serene, Japanese zen garden",
         "change the background to an active volcano",
+        "add a swirling galaxy nebula behind them",
+        "change the background to the inside of a massive clockwork machine",
+        "place them on a beach with bioluminescent waves",
+        "put them in a deserted, haunted mansion",
+        "change the background to a bustling fantasy marketplace",
+        "add a dense, ancient forest with glowing mushrooms",
+        "change the background to a high-tech server room",
+        "place them on a cloud city floating in the sky",
+        "put them in the middle of a colossal alien structure",
+        "change the background to a snowy mountain peak",
+        "add a steampunk cityscape with airships",
+        "change the background to a tranquil bamboo forest",
+        "place them inside a giant's terrarium",
+        "put them on a pirate ship in a stormy sea",
+        "change the background to an infinite, mirrored room",
+        "add a field of sunflowers stretching to the horizon",
+        "change the background to a gritty, noir detective office",
+        "place them in the middle of a meteor shower",
+        "put them in an overgrown, ruined temple",
+        "change the background to a colorful coral reef",
+        "add a dramatic waterfall behind them",
+        "change the background to a minimalist concrete room",
+        "place them on the edge of a black hole",
+        "put them inside a vibrant, crowded carnival",
+        "change the background to a peaceful countryside meadow",
+        "add a fleet of spaceships in the sky",
+        "change the background to a microscopic world of cells",
+        "place them in an abandoned, overgrown theme park",
+        "put them at the center of a labyrinth",
+        "change the background to an alien jungle with strange plants",
+        "add a massive, ancient tree in the background",
+        "change the background to a victorian-era street",
     ],
     "Character & Clothing": [
         "Change the clothes",
@@ -111,6 +208,38 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "change clothes to be made of plants and leaves",
         "give them shimmering, galaxy-patterned skin",
         "add a cute animal sidekick on their shoulder",
+        "change the clothes to a knight's suit of armor",
+        "make the person's eyes glow with energy",
+        "add a robot arm",
+        "change the clothes to a wizard's robe with celestial patterns",
+        "add a crown of flowers to their hair",
+        "make the person appear as a ghost or spirit",
+        "change the clothes to a deep-sea diver suit",
+        "add tribal face paint",
+        "change the clothes to a rock star's leather outfit",
+        "give them horns like a dragon",
+        "add a floating, magical orb next to them",
+        "change the clothes to be made of liquid metal",
+        "make their skin look like cracked porcelain",
+        "add a steampunk-style mechanical monocle",
+        "change the clothes to a traditional samurai armor",
+        "give them an ethereal, translucent body",
+        "add a futuristic holographic visor",
+        "change the clothes to a plague doctor's costume",
+        "make their hair a cascade of water",
+        "add complex, futuristic circuitry patterns on their face",
+        "change the clothes to a cozy, oversized knit sweater",
+        "give them antlers like a forest deity",
+        "add a talking parrot companion",
+        "change the clothes to a 1920s flapper dress",
+        "make their shadow have a monstrous shape",
+        "add a glowing energy sword to their hand",
+        "change the clothes to be made of pure light",
+        "give them pixelated, glitchy effects",
+        "add a gas mask",
+        "change the clothes to a pilot's bomber jacket",
+        "make their skin appear to be made of stars",
+        "add a magical staff that crackles with lightning",
     ],
 };
 
@@ -123,10 +252,10 @@ interface BackgroundControlsProps {
 
 const BackgroundControls: React.FC<BackgroundControlsProps> = ({ color, onColorChange, disabled }) => {
   return (
-    <div className={`bg-gray-800/50 border border-gray-700 rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center transition-opacity ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+    <div className={`bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center transition-opacity ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
       <div className="flex items-center justify-center gap-2 mb-3">
-        <PaletteIcon className="w-5 h-5 text-gray-400" />
-        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+        <PaletteIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+        <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
           Background Color
         </h3>
       </div>
@@ -135,11 +264,11 @@ const BackgroundControls: React.FC<BackgroundControlsProps> = ({ color, onColorC
           type="color"
           value={color}
           onChange={(e) => onColorChange(e.target.value)}
-          className="w-16 h-10 p-1 bg-gray-700 border border-gray-600 rounded-md cursor-pointer disabled:cursor-not-allowed"
+          className="w-16 h-10 p-1 bg-[var(--background-secondary)] border border-[var(--border-secondary)] rounded-md cursor-pointer disabled:cursor-not-allowed"
           title="Select background color"
           disabled={disabled}
         />
-        <span className="font-mono text-gray-300">{color.toUpperCase()}</span>
+        <span className="font-mono text-[var(--text-primary)]">{color.toUpperCase()}</span>
       </div>
     </div>
   );
@@ -152,14 +281,13 @@ const dataUrlToFile = async (dataUrl: string, filename: string): Promise<File> =
 };
 
 const generateFilename = (prompt: string, aspectRatio: string): string => {
-  // Take the first 5 words of the prompt, or use a default.
   const promptPart = prompt
     .trim()
     .split(/\s+/)
     .slice(0, 5)
     .join('-')
     .toLowerCase()
-    .replace(/[^a-z0-9-]/g, ''); // Remove anything that's not a letter, number, or hyphen.
+    .replace(/[^a-z0-9-]/g, '');
 
   const finalPromptPart = promptPart || 'ai-edit';
   const ratio = aspectRatio.replace(':', 'x');
@@ -288,7 +416,7 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
             <ImageDisplay label="Original" imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} />
             <div className="relative">
               {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-800/80 rounded-lg z-10">
+                <div className="absolute inset-0 flex items-center justify-center bg-[var(--background-secondary)]/80 rounded-lg z-10">
                   <Loader />
                 </div>
               )}
@@ -341,6 +469,7 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
 
 const AppContent: React.FC = () => {
   const { user, isPremium, credits, deductCredits, goPremium, saveEdit, logGeneration } = useUser();
+  const { theme } = useTheme();
   const [view, setView] = useState<'editor' | 'history'>('editor');
 
   const [initialUpload, setInitialUpload] = useState<ImageFile | null>(null);
@@ -353,8 +482,12 @@ const AppContent: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('None');
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('1:1');
   const [portraitQuality, setPortraitQuality] = useState<'hd' | 'fhd'>('fhd');
-  const [backgroundColor, setBackgroundColor] = useState<string>('#1f2937');
+  const [backgroundColor, setBackgroundColor] = useState<string>(theme === 'light' ? '#e2e8f0' : '#1f2937');
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+
+  useEffect(() => {
+    setBackgroundColor(theme === 'light' ? '#e2e8f0' : '#1f2937');
+  }, [theme]);
 
   const resetStateForNewImage = () => {
     setInitialUpload(null);
@@ -365,7 +498,7 @@ const AppContent: React.FC = () => {
     setActiveFilter('None');
     setSelectedAspectRatio('1:1');
     setPortraitQuality('fhd');
-    setBackgroundColor('#1f2937');
+    setBackgroundColor(theme === 'light' ? '#e2e8f0' : '#1f2937');
     setPrompt('');
   };
 
@@ -619,9 +752,9 @@ const AppContent: React.FC = () => {
   };
 
   return (
-     <div className="min-h-screen bg-gray-900 text-gray-200 font-sans">
+     <div className={`min-h-screen font-sans relative ${theme === 'cyberpunk' ? 'cyberpunk-bg-grid' : ''}`}>
       <Header onNavigate={setView} currentView={view} />
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 relative z-10">
         {view === 'editor' && <PhotoEditor {...photoEditorProps} />}
         {view === 'history' && <History />}
       </main>
@@ -631,9 +764,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <UserProvider>
-      <AppContent />
-    </UserProvider>
+    <ThemeProvider>
+        <UserProvider>
+            <AppContent />
+        </UserProvider>
+    </ThemeProvider>
   );
 };
 

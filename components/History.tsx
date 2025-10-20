@@ -24,8 +24,8 @@ export const History: React.FC = () => {
     <>
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-center gap-3 mb-8">
-          <HistoryIcon className="w-8 h-8 text-blue-400" />
-          <h1 className="text-3xl font-bold text-white text-center">
+          <HistoryIcon className="w-8 h-8 text-[var(--accent-primary)]" />
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] text-center">
             My Generation History
           </h1>
         </div>
@@ -35,7 +35,7 @@ export const History: React.FC = () => {
             {reversedHistory.map((edit) => (
               <div
                 key={edit.id}
-                className="aspect-square bg-gray-800 rounded-lg overflow-hidden relative group cursor-pointer shadow-lg transition-transform hover:scale-105"
+                className="aspect-square bg-[var(--background-secondary)] rounded-lg overflow-hidden relative group cursor-pointer shadow-lg transition-transform hover:scale-105 border border-[var(--border-primary)]"
                 onClick={() => setSelectedImage(edit)}
               >
                 <img
@@ -52,7 +52,7 @@ export const History: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-gray-500 bg-gray-800/50 border-2 border-dashed border-gray-700 rounded-xl">
+          <div className="text-center py-20 text-[var(--text-secondary)] bg-[var(--background-tertiary)] border-2 border-dashed border-[var(--border-secondary)] rounded-xl">
             <ImageIcon className="w-16 h-16 mx-auto mb-4" />
             <h2 className="text-xl font-semibold">No History Found</h2>
             <p className="mt-2">
@@ -64,19 +64,19 @@ export const History: React.FC = () => {
 
       {selectedImage && (
         <div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
         >
           <div
-            className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col relative"
+            className="bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-4 border-b border-gray-700 flex-shrink-0">
-              <p className="text-gray-300">
-                <span className="font-semibold text-gray-200">Prompt:</span>{' '}
+            <div className="p-4 border-b border-[var(--border-primary)] flex-shrink-0">
+              <p className="text-[var(--text-primary)]">
+                <span className="font-semibold text-[var(--text-primary)]">Prompt:</span>{' '}
                 {selectedImage.prompt}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-[var(--text-secondary)] mt-1">
                 {formatDate(selectedImage.id)}
               </p>
             </div>
@@ -90,7 +90,7 @@ export const History: React.FC = () => {
             <button
               onClick={() => setSelectedImage(null)}
               title="Close"
-              className="absolute top-3 right-3 bg-gray-700 text-gray-300 rounded-full p-2 hover:bg-gray-600 hover:text-white transition-colors"
+              className="absolute top-3 right-3 bg-[var(--background-tertiary)] text-[var(--text-secondary)] rounded-full p-2 hover:bg-[var(--border-primary)] hover:text-[var(--text-primary)] transition-colors"
             >
               <CloseIcon className="w-5 h-5" />
             </button>

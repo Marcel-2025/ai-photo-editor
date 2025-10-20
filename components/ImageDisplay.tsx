@@ -23,16 +23,16 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
   return (
     <div className="w-full">
       <div className="flex justify-center items-center mb-4 relative">
-        <h2 className="text-lg font-semibold text-gray-300">{label}</h2>
+        <h2 className="text-lg font-semibold text-[var(--text-primary)]">{label}</h2>
         {isResettable && onReset && (
-             <button onClick={onReset} title="Reset to Original" className="absolute right-0 text-sm flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-gray-300 px-2 py-1 rounded-md transition-colors">
+             <button onClick={onReset} title="Reset to Original" className="absolute right-0 text-sm flex items-center gap-1 bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] px-2 py-1 rounded-md transition-colors">
                 <RedoIcon className="w-4 h-4 transform -scale-x-100" />
                 Reset
              </button>
         )}
       </div>
       <div 
-        className={`${getAspectRatioClass(aspectRatio)} w-full bg-gray-800 rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-gray-700 transition-colors duration-300`}
+        className={`${getAspectRatioClass(aspectRatio)} w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)] transition-colors duration-300`}
         style={{ backgroundColor }}
       >
         {imageUrl ? (
@@ -43,7 +43,7 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
             style={{ filter: filterCss }}
           />
         ) : (
-          <div className="text-gray-500 flex flex-col items-center">
+          <div className="text-[var(--text-secondary)] flex flex-col items-center">
             <ImageIcon className="w-16 h-16" />
             <p className="mt-2">{label} image will appear here</p>
           </div>

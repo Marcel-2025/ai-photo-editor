@@ -18,10 +18,10 @@ export const AspectRatioControls: React.FC<AspectRatioControlsProps> = ({
   onSelectRatio,
 }) => {
   return (
-    <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center">
+    <div className="bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center">
       <div className="flex items-center justify-center gap-2 mb-3">
-        <AspectRatioIcon className="w-5 h-5 text-gray-400" />
-        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+        <AspectRatioIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+        <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
           Aspect Ratio
         </h3>
       </div>
@@ -32,8 +32,8 @@ export const AspectRatioControls: React.FC<AspectRatioControlsProps> = ({
             onClick={() => onSelectRatio(ratio.value)}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
               activeRatio === ratio.value
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                ? 'bg-[var(--accent-primary)] text-white shadow-md'
+                : 'bg-[var(--background-secondary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] border border-[var(--border-secondary)]'
             }`}
           >
             {ratio.name}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { SparklesIcon, UserIcon, CreditIcon, LogoutIcon, HistoryIcon } from './IconComponents';
 import { PremiumModal } from './PremiumModal';
+import { ThemeControls } from './ThemeControls';
 
 interface HeaderProps {
     onNavigate: (view: 'editor' | 'history') => void;
@@ -14,22 +15,25 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
 
   return (
     <>
-      <header className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 sticky top-0 z-20">
+      <header className="bg-[var(--background-secondary)]/80 backdrop-blur-sm border-b border-[var(--border-primary)]/50 sticky top-0 z-20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <button onClick={() => onNavigate('editor')} className="flex items-center space-x-3 group">
-            <SparklesIcon className="w-8 h-8 text-blue-400 group-hover:animate-pulse" />
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <SparklesIcon className="w-8 h-8 text-[var(--accent-primary)] group-hover:animate-pulse" />
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
               AI Photo Editor
             </h1>
           </button>
-          {user && (
+          
+          <div className="flex items-center space-x-2 sm:space-x-4">
+             {user && <ThemeControls /> }
+            {user && (
             <div className="flex items-center space-x-2 sm:space-x-4">
               {!isPremium && (
                 <>
-                  <div className="flex items-center space-x-2 bg-gray-800/50 px-3 py-1.5 rounded-full border border-gray-700">
+                  <div className="hidden md:flex items-center space-x-2 bg-[var(--background-secondary)] px-3 py-1.5 rounded-full border border-[var(--border-primary)]">
                     <CreditIcon className="w-5 h-5 text-yellow-400" />
-                    <span className="font-semibold text-white">{credits}</span>
-                    <span className="text-gray-400 text-sm hidden sm:inline">Credits</span>
+                    <span className="font-semibold text-[var(--text-primary)]">{credits}</span>
+                    <span className="text-[var(--text-secondary)] text-sm hidden sm:inline">Credits</span>
                   </div>
                   <button 
                     onClick={() => setShowPremiumModal(true)}
@@ -49,20 +53,21 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
                <button 
                 onClick={() => onNavigate('history')}
                 title="View History"
-                className={`p-2 rounded-full transition-colors ${currentView === 'history' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                className={`p-2 rounded-full transition-colors ${currentView === 'history' ? 'bg-[var(--accent-primary)] text-white' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)]'}`}
                >
                 <HistoryIcon className="w-6 h-6" />
                </button>
 
-              <div className="flex items-center space-x-2 text-gray-300">
+              <div className="flex items-center space-x-2 text-[var(--text-primary)]">
                 <UserIcon className="w-6 h-6" />
                 <span className="font-medium hidden sm:inline">{user.name}</span>
               </div>
-              <button onClick={logout} title="Logout" className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-full transition-colors">
+              <button onClick={logout} title="Logout" className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] rounded-full transition-colors">
                 <LogoutIcon className="w-6 h-6" />
               </button>
             </div>
           )}
+          </div>
         </div>
       </header>
       {showPremiumModal && <PremiumModal onClose={() => setShowPremiumModal(false)} onConfirm={() => { goPremium(); setShowPremiumModal(false); }} />}

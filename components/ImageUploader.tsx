@@ -22,7 +22,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) =
 
   return (
     <div
-      className="w-full max-w-lg p-8 border-2 border-dashed border-gray-600 rounded-xl text-center cursor-pointer hover:border-blue-500 hover:bg-gray-800/50 transition-colors duration-300"
+      className="w-full max-w-lg p-8 border-2 border-dashed border-[var(--border-secondary)] rounded-xl text-center cursor-pointer hover:border-[var(--accent-primary)] hover:bg-[var(--background-secondary)] transition-colors duration-300"
       onClick={handleClick}
     >
       <input
@@ -33,9 +33,9 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) =
         accept="image/png, image/jpeg, image/webp"
       />
       <div className="flex flex-col items-center">
-        <UploadIcon className="w-16 h-16 text-gray-500 mb-4" />
-        <h3 className="text-xl font-semibold text-gray-200">Click to upload a photo</h3>
-        <p className="text-gray-400 mt-1">PNG, JPG, or WEBP</p>
+        <UploadIcon className="w-16 h-16 text-[var(--text-secondary)] mb-4" />
+        <h3 className="text-xl font-semibold text-[var(--text-primary)]">Click to upload a photo</h3>
+        <p className="text-[var(--text-secondary)] mt-1">PNG, JPG, or WEBP</p>
       </div>
     </div>
   );
