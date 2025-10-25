@@ -18,9 +18,7 @@ const RATIO_CONFIG = [
 
 export const VariationsDisplay: React.FC<VariationsDisplayProps> = ({ variations, selectedAspectRatio, onSelect, onSetAsBase, onDownload, onSaveToFavorites }) => {
   return (
-    <div className="mt-12">
-      <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6 text-center">Generated Variations</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="flex flex-col gap-6">
         {RATIO_CONFIG.map((ratio) => {
             const imageUrl = variations[ratio.value];
             const isSelected = selectedAspectRatio === ratio.value;
@@ -80,7 +78,6 @@ export const VariationsDisplay: React.FC<VariationsDisplayProps> = ({ variations
                 </div>
             )
         })}
-      </div>
     </div>
   );
 };

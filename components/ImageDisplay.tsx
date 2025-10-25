@@ -13,6 +13,8 @@ interface ImageDisplayProps {
 
 export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, filterCss, backgroundColor, onReset, isResettable, aspectRatio }) => {
   const getAspectRatioClass = (ratio?: string) => {
+    // This function is used for generated variations with a forced aspect ratio,
+    // or for the placeholder.
     switch (ratio) {
         case '16:9': return 'aspect-[16/9]';
         case '9:16': return 'aspect-[9/16]';
@@ -32,14 +34,17 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
         )}
       </div>
       <div 
-        className={`${getAspectRatioClass(aspectRatio)} w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)] transition-colors duration-300`}
+        // Apply aspect ratio class only if it's explicitly provided OR if there's no image URL yet.
+        // This makes the placeholder square but lets the original image set its own aspect ratio.
+        className={`${(aspectRatio || !imageUrl) ? getAspectRatioClass(aspectRatio) : ''} w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)] transition-colors duration-300`}
         style={{ backgroundColor }}
       >
         {imageUrl ? (
           <img 
             src={imageUrl} 
             alt={label} 
-            className="w-full h-full object-cover transition-all duration-300" 
+            // If an aspect ratio is forced, cover the container. Otherwise, display the full image.
+            className={`transition-all duration-300 ${aspectRatio ? 'w-full h-full object-cover' : 'w-full h-auto'}`}
             style={{ filter: filterCss }}
           />
         ) : (

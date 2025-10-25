@@ -8,7 +8,7 @@ import { EditControls } from './components/EditControls';
 import { Loader } from './components/Loader';
 import { FilterControls, Filter } from './components/FilterControls';
 import { AspectRatioControls, AspectRatio } from './components/AspectRatioControls';
-import { PaletteIcon } from './components/IconComponents';
+import { PaletteIcon, ImageIcon } from './components/IconComponents';
 import { PromptSuggestions } from './components/PromptSuggestions';
 
 import { UserProvider, useUser } from './contexts/UserContext';
@@ -364,7 +364,6 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
     } = props;
     
     const activeFilterCss = FILTERS.find(f => f.name === activeFilter)?.css || 'none';
-    const selectedVariationUrl = generatedVariations[selectedAspectRatio] || null;
     const hasVariations = Object.keys(generatedVariations).length > 0;
   
     return (
@@ -412,54 +411,62 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <ImageDisplay label="Original" imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} />
-            <div className="relative">
-              {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-[var(--background-secondary)]/80 rounded-lg z-10">
-                  <Loader />
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <ImageDisplay label="Original" imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} />
+              
+              <div className="w-full">
+                <div className="flex justify-center items-center mb-4 relative">
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">Generated Variations</h2>
                 </div>
-              )}
-              <ImageDisplay 
-                label={`${selectedAspectRatio} Variation`}
-                imageUrl={selectedVariationUrl} 
-                filterCss={activeFilterCss} 
-                backgroundColor={selectedVariationUrl ? backgroundColor : undefined}
-                aspectRatio={selectedAspectRatio}
-              />
+                <div className="relative">
+                  {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-[var(--background-secondary)]/80 rounded-lg z-10">
+                      <Loader />
+                    </div>
+                  )}
+                  
+                  {!hasVariations ? (
+                     <div className="aspect-square w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)]">
+                      <div className="text-[var(--text-secondary)] flex flex-col items-center">
+                        <ImageIcon className="w-16 h-16" />
+                        <p className="mt-2">Variations will appear here</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <VariationsDisplay
+                        variations={generatedVariations}
+                        selectedAspectRatio={selectedAspectRatio}
+                        onSelect={setSelectedAspectRatio}
+                        onSetAsBase={handleSetAsBase}
+                        onDownload={handleDownloadVariation}
+                        onSaveToFavorites={handleSaveVariationToFavorites}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
+            
+            <EditControls
+              prompt={prompt}
+              onPromptChange={(e) => setPrompt(e.target.value)}
+              onEdit={handleEdit}
+              isLoading={isLoading}
+              onClear={resetStateForNewImage}
+              onUndo={handleUndo}
+              onRedo={handleRedo}
+              canUndo={hasVariations}
+              canRedo={!!redoState}
+            />
+
+            <PromptSuggestions 
+                suggestions={PROMPT_SUGGESTIONS}
+                onSelect={handleSuggestionSelect}
+                disabled={isLoading}
+            />
+            
+            <Favorites />
           </div>
-          
-          <EditControls
-            prompt={prompt}
-            onPromptChange={(e) => setPrompt(e.target.value)}
-            onEdit={handleEdit}
-            isLoading={isLoading}
-            onClear={resetStateForNewImage}
-            onUndo={handleUndo}
-            onRedo={handleRedo}
-            canUndo={hasVariations}
-            canRedo={!!redoState}
-          />
-
-          <PromptSuggestions 
-              suggestions={PROMPT_SUGGESTIONS}
-              onSelect={handleSuggestionSelect}
-              disabled={isLoading}
-          />
-
-          {hasVariations && (
-              <VariationsDisplay
-                  variations={generatedVariations}
-                  selectedAspectRatio={selectedAspectRatio}
-                  onSelect={setSelectedAspectRatio}
-                  onSetAsBase={handleSetAsBase}
-                  onDownload={handleDownloadVariation}
-                  onSaveToFavorites={handleSaveVariationToFavorites}
-              />
-          )}
-          
-          <Favorites />
         </>
       )}
       {showPremiumModal && <PremiumModal onClose={() => setShowPremiumModal(false)} onConfirm={() => { goPremium(); setShowPremiumModal(false); }} />}

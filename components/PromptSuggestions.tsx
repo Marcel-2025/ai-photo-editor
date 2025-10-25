@@ -37,7 +37,8 @@ export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestion
   const pagesInfo = useMemo(() => {
     return Object.entries(suggestions).reduce((acc, [category, prompts]) => {
       acc[category] = {
-        totalPages: Math.ceil(prompts.length / PROMPTS_PER_PAGE)
+        // FIX: Cast `prompts` to `string[]` because it is inferred as `unknown`.
+        totalPages: Math.ceil((prompts as string[]).length / PROMPTS_PER_PAGE)
       };
       return acc;
     }, {} as { [category: string]: { totalPages: number } });
@@ -87,7 +88,8 @@ export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestion
                 </button>
                 <div className="flex-1 min-h-[88px]">
                   <div className="flex flex-wrap justify-center gap-3">
-                    {prompts.slice(startIndex, endIndex).map((suggestion, index) => {
+                    {/* FIX: Cast `prompts` to `string[]` because it is inferred as `unknown`. */}
+                    {(prompts as string[]).slice(startIndex, endIndex).map((suggestion, index) => {
                       const color = neonColors[index % neonColors.length];
                       const isNeon = promptStyle === 'neon';
                       return (
