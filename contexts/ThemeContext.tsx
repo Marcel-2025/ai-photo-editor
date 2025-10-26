@@ -2,12 +2,16 @@ import React, { createContext, useState, useContext, ReactNode, useEffect, useCa
 
 type Theme = 'light' | 'dark' | 'cyberpunk';
 type PromptStyle = 'default' | 'neon';
+type Background = 'default' | 'aurora' | 'particles';
+
 
 interface ThemeContextType {
   theme: Theme;
   promptStyle: PromptStyle;
+  background: Background;
   setTheme: (theme: Theme) => void;
   togglePromptStyle: () => void;
+  setBackground: (background: Background) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -16,14 +20,16 @@ const THEME_STORAGE_KEY = 'photo_editor_theme';
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>('dark');
   const [promptStyle, setPromptStyle] = useState<PromptStyle>('neon');
+  const [background, setBackgroundState] = useState<Background>('aurora');
 
   useEffect(() => {
     try {
       const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
       if (storedTheme) {
-        const { theme: savedTheme, promptStyle: savedPromptStyle } = JSON.parse(storedTheme);
+        const { theme: savedTheme, promptStyle: savedPromptStyle, background: savedBackground } = JSON.parse(storedTheme);
         if (savedTheme) setThemeState(savedTheme);
         if (savedPromptStyle) setPromptStyle(savedPromptStyle);
+        if (savedBackground) setBackgroundState(savedBackground);
       }
     } catch (error) {
       console.error("Failed to load theme from local storage", error);
@@ -33,18 +39,24 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
-    const newSettings = { theme: newTheme, promptStyle };
+    const newSettings = { theme: newTheme, promptStyle, background };
     localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(newSettings));
-  }, [promptStyle]);
+  }, [promptStyle, background]);
 
   const togglePromptStyle = useCallback(() => {
     setPromptStyle(currentStyle => {
         const newStyle = currentStyle === 'default' ? 'neon' : 'default';
-        const newSettings = { theme, promptStyle: newStyle };
+        const newSettings = { theme, promptStyle: newStyle, background };
         localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(newSettings));
         return newStyle;
     });
-  }, [theme]);
+  }, [theme, background]);
+
+  const setBackground = useCallback((newBackground: Background) => {
+    setBackgroundState(newBackground);
+    const newSettings = { theme, promptStyle, background: newBackground };
+    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(newSettings));
+  }, [theme, promptStyle]);
 
 
   useEffect(() => {
@@ -54,7 +66,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, promptStyle, setTheme, togglePromptStyle }}>
+    <ThemeContext.Provider value={{ theme, promptStyle, background, setTheme, togglePromptStyle, setBackground }}>
       {children}
     </ThemeContext.Provider>
   );

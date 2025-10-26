@@ -75,10 +75,71 @@
         pointer-events: none;
         z-index: 0;
       }
+
+      /* Animated Gradient Text */
+      .animated-gradient {
+        animation: animated-gradient 10s ease infinite;
+        background-size: 400% 400%;
+        background-image: linear-gradient(-45deg, #ff00ff, #00f0ff, #ffc800, #ff00ff);
+      }
+      @keyframes animated-gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      
+      /* Aurora Background */
+      .bg-aurora {
+        position: relative;
+        overflow: hidden;
+      }
+      .bg-aurora::before, .bg-aurora::after {
+        content: '';
+        position: absolute;
+        filter: blur(80px);
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .bg-aurora::before {
+        width: 400px;
+        height: 400px;
+        background-color: rgba(0, 240, 255, 0.2);
+        animation: animate-aurora-1 20s infinite alternate;
+      }
+      .bg-aurora::after {
+        width: 300px;
+        height: 300px;
+        background-color: rgba(255, 0, 255, 0.2);
+        animation: animate-aurora-2 25s infinite alternate;
+      }
+      @keyframes animate-aurora-1 {
+        0% { top: 10%; left: 20%; }
+        100% { top: 70%; left: 80%; transform: scale(1.5); }
+      }
+      @keyframes animate-aurora-2 {
+        0% { bottom: 5%; right: 15%; }
+        100% { bottom: 60%; right: 70%; transform: scale(1.2); }
+      }
+
+      /* Particles Background */
+      #particles-js {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          z-index: 0;
+      }
+      .bg-particles {
+        position: relative;
+        background-color: #0a0a1a;
+      }
     </style>
   </head>
   <body class="bg-[var(--background-primary)]">
     <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>

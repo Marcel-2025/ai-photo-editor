@@ -23,9 +23,9 @@ export const History: React.FC = () => {
   return (
     <>
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-center gap-3 mb-8">
+        <div className="flex items-center justify-center gap-2 sm:gap-3 mb-8">
           <HistoryIcon className="w-8 h-8 text-[var(--accent-primary)]" />
-          <h1 className="text-3xl font-bold text-[var(--text-primary)] text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] text-center">
             My Generation History
           </h1>
         </div>

@@ -3,10 +3,11 @@ import { useUser } from '../contexts/UserContext';
 import { SparklesIcon, UserIcon, CreditIcon, LogoutIcon, HistoryIcon } from './IconComponents';
 import { PremiumModal } from './PremiumModal';
 import { ThemeControls } from './ThemeControls';
+import { BackgroundControls } from './BackgroundControls';
 
 interface HeaderProps {
-    onNavigate: (view: 'editor' | 'history') => void;
-    currentView: 'editor' | 'history';
+    onNavigate: (view: 'editor' | 'history' | 'dashboard') => void;
+    currentView: 'editor' | 'history' | 'dashboard';
 }
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
@@ -17,15 +18,20 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
     <>
       <header className="bg-[var(--background-secondary)]/80 backdrop-blur-sm border-b border-[var(--border-primary)]/50 sticky top-0 z-20">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <button onClick={() => onNavigate('editor')} className="flex items-center space-x-3 group">
+          <button onClick={() => onNavigate('editor')} className="flex items-center space-x-2 sm:space-x-3 group">
             <SparklesIcon className="w-8 h-8 text-[var(--accent-primary)] group-hover:animate-pulse" />
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
               AI Photo Editor
             </h1>
           </button>
           
           <div className="flex items-center space-x-2 sm:space-x-4">
-             {user && <ThemeControls /> }
+             {user && (
+                <>
+                    <BackgroundControls />
+                    <ThemeControls />
+                </>
+             )}
             {user && (
             <div className="flex items-center space-x-2 sm:space-x-4">
               {!isPremium && (
@@ -58,10 +64,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView }) => {
                 <HistoryIcon className="w-6 h-6" />
                </button>
 
-              <div className="flex items-center space-x-2 text-[var(--text-primary)]">
+              <button onClick={() => onNavigate('dashboard')} title="My Dashboard" className={`flex items-center space-x-2 p-2 rounded-lg transition-colors ${currentView === 'dashboard' ? 'bg-[var(--accent-primary)] text-white' : 'text-[var(--text-primary)] hover:bg-[var(--background-tertiary)]'}`}>
                 <UserIcon className="w-6 h-6" />
                 <span className="font-medium hidden sm:inline">{user.name}</span>
-              </div>
+              </button>
               <button onClick={logout} title="Logout" className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] rounded-full transition-colors">
                 <LogoutIcon className="w-6 h-6" />
               </button>

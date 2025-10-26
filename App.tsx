@@ -8,7 +8,8 @@ import { EditControls } from './components/EditControls';
 import { Loader } from './components/Loader';
 import { FilterControls, Filter } from './components/FilterControls';
 import { AspectRatioControls, AspectRatio } from './components/AspectRatioControls';
-import { PaletteIcon, ImageIcon } from './components/IconComponents';
+// FIX: Removed unused 'StatsIcon' which was not exported from IconComponents.
+import { PaletteIcon, ImageIcon, UserIcon, CreditIcon, SparklesIcon, SaveIcon, PaintBrushIcon, SettingsIcon, ColorfulSparklesIcon, ColorfulSaveIcon, ColorfulHistoryIcon } from './components/IconComponents';
 import { PromptSuggestions } from './components/PromptSuggestions';
 
 import { UserProvider, useUser } from './contexts/UserContext';
@@ -50,46 +51,6 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "as a black and white sketch",
         "in a pop-art style like Andy Warhol",
         "in a vintage comic book style",
-        "as a stained glass window",
-        "in a claymation style",
-        "as a detailed charcoal drawing",
-        "in a futuristic, cyberpunk art style",
-        "as a children's book illustration",
-        "in the style of ancient Egyptian hieroglyphs",
-        "as a vibrant graffiti mural",
-        "in a minimalist line art style",
-        "in the style of Vincent Van Gogh",
-        "as a surrealist painting by Salvador Dalí",
-        "in an Art Nouveau style",
-        "as a retro 80s synthwave poster",
-        "in a heavy metal album cover style",
-        "as a technical blueprint drawing",
-        "in a low-poly geometric style",
-        "as a thermal camera image",
-        "in the style of ukiyo-e Japanese woodblock prints",
-        "as an intricate mandala pattern",
-        "in a psychedelic, trippy art style",
-        "as a high-fashion magazine cover",
-        "in a gritty, graphic novel style",
-        "as a detailed map from a fantasy novel",
-        "in the style of impressionist painter Claude Monet",
-        "as an abstract expressionist piece",
-        "in a photorealistic style",
-        "as a Banksy-style street art stencil",
-        "in a Tim Burton-esque spooky style",
-        "as an architectural concept sketch",
-        "in the style of illuminated manuscripts",
-        "as a propaganda poster",
-        "in a storybook fairytale style",
-        "as a pointillism painting",
-        "in a mosaic tile art style",
-        "as a 3D render",
-        "in a vaporwave aesthetic",
-        "as a blueprint schematic",
-        "in a gothic art style",
-        "as a cinematic film still",
-        "in a bold, colorful Fauvist style",
-        "as a carved wooden sculpture",
     ],
     "Lighting & Mood": [
         "with dramatic, cinematic lighting",
@@ -100,46 +61,6 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "with neon, cyberpunk lighting",
         "make it bright and sunny",
         "with a spooky, eerie glow",
-        "with volumetric light rays",
-        "backlit with a strong rim light",
-        "with warm, cozy candlelight",
-        "with dramatic film noir shadows",
-        "with a magical, sparkling aura",
-        "with an apocalyptic, red-sky glow",
-        "with dreamy, pastel-colored light",
-        "with a single, focused spotlight",
-        "with bioluminescent glowing plants",
-        "with the northern lights (aurora borealis) in the sky",
-        "with harsh, direct sunlight creating sharp shadows",
-        "with lens flare effects",
-        "with underwater light caustics",
-        "with a dark, stormy sky and lightning",
-        "with a peaceful, serene twilight mood",
-        "with a vibrant, energetic feel",
-        "with a romantic, soft-focus look",
-        "with a lonely, isolated atmosphere",
-        "with a nostalgic, faded photo look",
-        "with an ominous, foreboding mood",
-        "with a chaotic, action-packed atmosphere",
-        "with a celebratory, festive lighting",
-        "with a calm, meditative ambiance",
-        "with a gritty, urban feel",
-        "with a sense of wonder and awe",
-        "with a playful, whimsical mood",
-        "with a futuristic, clean-room lighting",
-        "with a post-apocalyptic, desolate mood",
-        "with a majestic, epic scale",
-        "with an intimate, close-up feeling",
-        "with a cold, wintery light",
-        "with a hot, desert sun haze",
-        "with colorful disco lights",
-        "with light filtering through tree leaves",
-        "with a low-key lighting setup",
-        "with a high-key, bright white lighting",
-        "with the reflection of a city skyline at night",
-        "with a campfire as the main light source",
-        "with a mysterious silhouette against a bright background",
-        "with a heavenly, divine glow",
     ],
     "Scene & Background": [
         "Extend the image",
@@ -150,46 +71,6 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "change the background to a lush jungle",
         "put them in an underwater scene",
         "change the background to a futuristic space station",
-        "change the background to a field of giant flowers",
-        "place them inside a crystal cave",
-        "change the background to a post-apocalyptic wasteland",
-        "put them in a whimsical, floating candy land",
-        "change the background to a grand, baroque library",
-        "place them on the rings of Saturn",
-        "put them in a serene, Japanese zen garden",
-        "change the background to an active volcano",
-        "add a swirling galaxy nebula behind them",
-        "change the background to the inside of a massive clockwork machine",
-        "place them on a beach with bioluminescent waves",
-        "put them in a deserted, haunted mansion",
-        "change the background to a bustling fantasy marketplace",
-        "add a dense, ancient forest with glowing mushrooms",
-        "change the background to a high-tech server room",
-        "place them on a cloud city floating in the sky",
-        "put them in the middle of a colossal alien structure",
-        "change the background to a snowy mountain peak",
-        "add a steampunk cityscape with airships",
-        "change the background to a tranquil bamboo forest",
-        "place them inside a giant's terrarium",
-        "put them on a pirate ship in a stormy sea",
-        "change the background to an infinite, mirrored room",
-        "add a field of sunflowers stretching to the horizon",
-        "change the background to a gritty, noir detective office",
-        "place them in the middle of a meteor shower",
-        "put them in an overgrown, ruined temple",
-        "change the background to a colorful coral reef",
-        "add a dramatic waterfall behind them",
-        "change the background to a minimalist concrete room",
-        "place them on the edge of a black hole",
-        "put them inside a vibrant, crowded carnival",
-        "change the background to a peaceful countryside meadow",
-        "add a fleet of spaceships in the sky",
-        "change the background to a microscopic world of cells",
-        "place them in an abandoned, overgrown theme park",
-        "put them at the center of a labyrinth",
-        "change the background to an alien jungle with strange plants",
-        "add a massive, ancient tree in the background",
-        "change the background to a victorian-era street",
     ],
     "Character & Clothing": [
         "Change the clothes",
@@ -200,46 +81,6 @@ const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
         "change the clothes to elegant royal attire",
         "add a fantasy-style helmet",
         "make the person look like a cyborg",
-        "change the clothes to post-apocalyptic scavenger gear",
-        "add intricate, glowing magical runes on their skin",
-        "change the clothes to a sleek spy tuxedo",
-        "make the person's hair out of flowing fire",
-        "add elegant Venetian carnival mask",
-        "change clothes to be made of plants and leaves",
-        "give them shimmering, galaxy-patterned skin",
-        "add a cute animal sidekick on their shoulder",
-        "change the clothes to a knight's suit of armor",
-        "make the person's eyes glow with energy",
-        "add a robot arm",
-        "change the clothes to a wizard's robe with celestial patterns",
-        "add a crown of flowers to their hair",
-        "make the person appear as a ghost or spirit",
-        "change the clothes to a deep-sea diver suit",
-        "add tribal face paint",
-        "change the clothes to a rock star's leather outfit",
-        "give them horns like a dragon",
-        "add a floating, magical orb next to them",
-        "change the clothes to be made of liquid metal",
-        "make their skin look like cracked porcelain",
-        "add a steampunk-style mechanical monocle",
-        "change the clothes to a traditional samurai armor",
-        "give them an ethereal, translucent body",
-        "add a futuristic holographic visor",
-        "change the clothes to a plague doctor's costume",
-        "make their hair a cascade of water",
-        "add complex, futuristic circuitry patterns on their face",
-        "change the clothes to a cozy, oversized knit sweater",
-        "give them antlers like a forest deity",
-        "add a talking parrot companion",
-        "change the clothes to a 1920s flapper dress",
-        "make their shadow have a monstrous shape",
-        "add a glowing energy sword to their hand",
-        "change the clothes to be made of pure light",
-        "give them pixelated, glitchy effects",
-        "add a gas mask",
-        "change the clothes to a pilot's bomber jacket",
-        "make their skin appear to be made of stars",
-        "add a magical staff that crackles with lightning",
     ],
 };
 
@@ -309,6 +150,7 @@ interface PhotoEditorProps {
     portraitQuality: 'hd' | 'fhd';
     backgroundColor: string;
     showPremiumModal: boolean;
+    imageSize: number;
     goPremium: () => void;
 
     handleImageUpload: (file: File) => void;
@@ -326,6 +168,7 @@ interface PhotoEditorProps {
     setPortraitQuality: (value: React.SetStateAction<'hd' | 'fhd'>) => void;
     setBackgroundColor: (value: React.SetStateAction<string>) => void;
     setShowPremiumModal: (value: React.SetStateAction<boolean>) => void;
+    setImageSize: (value: React.SetStateAction<number>) => void;
     resetStateForNewImage: () => void;
 }
 
@@ -343,6 +186,7 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
         portraitQuality,
         backgroundColor,
         showPremiumModal,
+        imageSize,
         goPremium,
         handleImageUpload,
         handleEdit,
@@ -359,6 +203,7 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
         setPortraitQuality,
         setBackgroundColor,
         setShowPremiumModal,
+        setImageSize,
         resetStateForNewImage,
         initialUpload,
     } = props;
@@ -388,7 +233,7 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
             </div>
           )}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-8">
             <FilterControls
               filters={FILTERS}
               activeFilter={activeFilter}
@@ -412,8 +257,8 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <ImageDisplay label="Original" imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              <ImageDisplay label="Original" imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} constrainHeight size={imageSize} onSizeChange={setImageSize} />
               
               <div className="w-full">
                 <div className="flex justify-center items-center mb-4 relative">
@@ -464,8 +309,6 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
                 onSelect={handleSuggestionSelect}
                 disabled={isLoading}
             />
-            
-            <Favorites />
           </div>
         </>
       )}
@@ -474,10 +317,167 @@ const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
   );
 };
 
+
+const HomePage: React.FC = () => {
+    const { theme } = useTheme();
+    const [showLogin, setShowLogin] = useState(false);
+
+    const openLogin = () => {
+        setShowLogin(true);
+    };
+
+    const showcaseImages = [
+        "https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/235615/pexels-photo-235615.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/414102/pexels-photo-414102.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=600",
+    ];
+
+    return (
+        <div className={`min-h-screen font-sans`}>
+             <header className="absolute top-0 left-0 right-0 z-10 bg-transparent">
+                <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div className="flex items-center space-x-3 group">
+                        <SparklesIcon className="w-8 h-8 text-[var(--accent-primary)]" />
+                        <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">AI Photo Editor</h1>
+                    </div>
+                    <button
+                        onClick={openLogin}
+                        className="bg-[var(--accent-primary)] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[var(--accent-primary-hover)] transition-colors"
+                    >
+                        Get Started
+                    </button>
+                </div>
+            </header>
+
+            <main className="relative z-0">
+                <section className="min-h-[90vh] flex flex-col items-center justify-center text-center px-4">
+                     <div className="relative z-10">
+                        <PaintBrushIcon className="w-20 h-20 mx-auto mb-6 text-white" />
+                        <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 bg-clip-text text-transparent animated-gradient">Unleash Your Creativity with AI</h2>
+                        <p className="text-lg sm:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto mb-12">Transform your photos into stunning works of art. From simple touch-ups to fantastical transformations, our AI-powered editor makes it easy.</p>
+                        <button
+                            onClick={openLogin}
+                            className="bg-[var(--accent-primary)] text-white font-bold py-3 px-8 text-base sm:text-lg rounded-full hover:bg-[var(--accent-primary-hover)] transition-transform hover:scale-105"
+                        >
+                            Start Editing for Free
+                        </button>
+                    </div>
+                </section>
+                
+                <section className="container mx-auto px-4 py-8 sm:py-16">
+                     <h3 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[var(--text-primary)]">See The Magic</h3>
+                     <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+                        {showcaseImages.map((src, index) => (
+                             <img key={index} className="rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1" src={src} alt={`Showcase image ${index + 1}`} loading="lazy" />
+                        ))}
+                    </div>
+                </section>
+            </main>
+
+            {showLogin && (
+                <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 animate-fade-in">
+                   <style>{`.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
+                    <Login onClose={() => setShowLogin(false)} />
+                </div>
+            )}
+        </div>
+    );
+};
+
+const DashboardPage: React.FC = () => {
+    const { user, credits, isPremium, isProfilePublic, toggleProfilePublic, generationHistory, savedEdits } = useUser();
+    
+    if (!user) return null;
+
+    const statCards = [
+        {
+            icon: ColorfulSaveIcon,
+            label: "Favorites Saved",
+            value: savedEdits.length,
+            color: "cyan"
+        },
+        {
+            icon: ColorfulHistoryIcon,
+            label: "Total Generations",
+            value: generationHistory.length,
+            color: "pink"
+        },
+        ...(!isPremium ? [{
+            icon: ColorfulSparklesIcon,
+            label: "Credits Remaining",
+            value: credits,
+            color: "lime"
+        }] : [])
+    ];
+
+    return (
+        <div className="max-w-7xl mx-auto px-2">
+            <div className="text-center mb-12">
+                <UserIcon className="w-24 h-24 text-[var(--accent-primary)] mb-4 mx-auto" />
+                <h1 className="text-4xl font-bold text-[var(--text-primary)]">{user.name}</h1>
+                {isPremium ? (
+                    <p className="text-yellow-400 font-semibold mt-2 text-lg">Premium Member</p>
+                ) : (
+                    <p className="text-[var(--text-secondary)] mt-2 text-lg">Free Member</p>
+                )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {statCards.map((card, index) => (
+                    <div key={index} className={`bg-[var(--background-secondary)]/50 backdrop-blur-sm border-2 rounded-2xl p-6 shadow-2xl transition-all duration-300 hover:shadow-[0_0_25px] hover:-translate-y-1 border-cyan-500 shadow-cyan-500/20 hover:shadow-cyan-500/40`}>
+                        <div className="flex items-center gap-6">
+                            <card.icon className="w-12 h-12" />
+                            <div>
+                                <p className="text-lg text-[var(--text-secondary)]">{card.label}</p>
+                                <p className="text-4xl font-bold text-[var(--text-primary)]">{card.value}</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            
+            <div className="max-w-md mx-auto">
+                <div className="bg-[var(--background-secondary)]/50 backdrop-blur-sm border-2 border-purple-500 rounded-2xl p-6 shadow-2xl shadow-purple-500/20">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <SettingsIcon className="w-6 h-6 text-purple-400" />
+                            <label htmlFor="public-profile-toggle" className="text-lg font-medium text-[var(--text-primary)] cursor-pointer">
+                                Public Gallery
+                            </label>
+                        </div>
+                        <button
+                            id="public-profile-toggle"
+                            onClick={toggleProfilePublic}
+                            role="switch"
+                            aria-checked={isProfilePublic}
+                            className={`relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[var(--background-secondary)] ${
+                                isProfilePublic ? 'bg-purple-500' : 'bg-[var(--border-secondary)]'
+                            }`}
+                        >
+                            <span
+                                aria-hidden="true"
+                                className={`inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                    isProfilePublic ? 'translate-x-5' : 'translate-x-0'
+                                }`}
+                            />
+                        </button>
+                    </div>
+                     <p className="text-sm text-[var(--text-secondary)]/80 mt-3 text-center">Toggle to make your favorites gallery visible to others (feature coming soon).</p>
+                </div>
+            </div>
+
+            <Favorites />
+        </div>
+    );
+};
+
 const AppContent: React.FC = () => {
   const { user, isPremium, credits, deductCredits, goPremium, saveEdit, logGeneration } = useUser();
-  const { theme } = useTheme();
-  const [view, setView] = useState<'editor' | 'history'>('editor');
+  const { theme, background } = useTheme();
+  const [view, setView] = useState<'editor' | 'history' | 'dashboard'>('editor');
 
   const [initialUpload, setInitialUpload] = useState<ImageFile | null>(null);
   const [originalImage, setOriginalImage] = useState<ImageFile | null>(null);
@@ -491,10 +491,42 @@ const AppContent: React.FC = () => {
   const [portraitQuality, setPortraitQuality] = useState<'hd' | 'fhd'>('fhd');
   const [backgroundColor, setBackgroundColor] = useState<string>(theme === 'light' ? '#e2e8f0' : '#1f2937');
   const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [imageSize, setImageSize] = useState<number>(100);
 
   useEffect(() => {
     setBackgroundColor(theme === 'light' ? '#e2e8f0' : '#1f2937');
   }, [theme]);
+  
+   useEffect(() => {
+    if (background === 'particles') {
+      // FIX: Cast window to `any` to access `particlesJS` which is loaded from a script.
+      if ((window as any).particlesJS) {
+        // FIX: Cast window to `any` to access `particlesJS` which is loaded from a script.
+        (window as any).particlesJS('particles-js', {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: '#ffffff' },
+            shape: { type: 'circle' },
+            opacity: { value: 0.5, random: true },
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+          },
+          interactivity: {
+            detect_on: 'canvas',
+            events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+            modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+          },
+          retina_detect: true
+        });
+      }
+    } else {
+        const particlesEl = document.getElementById('particles-js');
+        if (particlesEl) {
+            particlesEl.innerHTML = '';
+        }
+    }
+  }, [background]);
 
   const resetStateForNewImage = () => {
     setInitialUpload(null);
@@ -507,6 +539,7 @@ const AppContent: React.FC = () => {
     setPortraitQuality('fhd');
     setBackgroundColor(theme === 'light' ? '#e2e8f0' : '#1f2937');
     setPrompt('');
+    setImageSize(100);
   };
 
   const handleImageUpload = async (file: File) => {
@@ -722,8 +755,18 @@ const AppContent: React.FC = () => {
     });
   };
 
+  const getBackgroundClass = () => {
+      if (theme === 'cyberpunk') return 'cyberpunk-bg-grid';
+      if (background === 'aurora') return 'bg-aurora';
+      if (background === 'particles') return 'bg-particles';
+      return '';
+  }
+
   if (!user) {
-    return <Login />;
+    return <div className={`min-h-screen ${getBackgroundClass()}`}>
+        <div id="particles-js"></div>
+        <HomePage />
+    </div>;
   }
   
   const photoEditorProps = {
@@ -739,6 +782,7 @@ const AppContent: React.FC = () => {
     portraitQuality,
     backgroundColor,
     showPremiumModal,
+    imageSize,
     goPremium,
     handleImageUpload,
     handleEdit,
@@ -755,16 +799,19 @@ const AppContent: React.FC = () => {
     setPortraitQuality,
     setBackgroundColor,
     setShowPremiumModal,
+    setImageSize,
     resetStateForNewImage
   };
 
   return (
-     <div className={`min-h-screen font-sans relative ${theme === 'cyberpunk' ? 'cyberpunk-bg-grid' : ''}`}>
-      <Header onNavigate={setView} currentView={view} />
-      <main className="container mx-auto px-4 py-8 relative z-10">
-        {view === 'editor' && <PhotoEditor {...photoEditorProps} />}
-        {view === 'history' && <History />}
-      </main>
+     <div className={`min-h-screen font-sans relative ${getBackgroundClass()}`}>
+        <div id="particles-js"></div>
+        <Header onNavigate={setView} currentView={view} />
+        <main className="container mx-auto px-4 py-6 sm:py-8 relative z-10">
+            {view === 'editor' && <PhotoEditor {...photoEditorProps} />}
+            {view === 'history' && <History />}
+            {view === 'dashboard' && <DashboardPage />}
+        </main>
     </div>
   );
 };

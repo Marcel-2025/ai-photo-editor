@@ -18,7 +18,7 @@ const RATIO_CONFIG = [
 
 export const VariationsDisplay: React.FC<VariationsDisplayProps> = ({ variations, selectedAspectRatio, onSelect, onSetAsBase, onDownload, onSaveToFavorites }) => {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:gap-6">
         {RATIO_CONFIG.map((ratio) => {
             const imageUrl = variations[ratio.value];
             const isSelected = selectedAspectRatio === ratio.value;

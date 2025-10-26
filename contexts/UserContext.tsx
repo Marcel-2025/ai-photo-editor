@@ -9,6 +9,7 @@ interface UserContextType {
   user: User | null;
   credits: number;
   isPremium: boolean;
+  isProfilePublic: boolean;
   savedEdits: SavedEdit[];
   generationHistory: SavedEdit[];
   login: (username: string) => void;
@@ -17,6 +18,7 @@ interface UserContextType {
   goPremium: () => void;
   saveEdit: (edit: Omit<SavedEdit, 'id'>) => void;
   logGeneration: (edit: Omit<SavedEdit, 'id'>) => void;
+  toggleProfilePublic: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -27,6 +29,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [credits, setCredits] = useState<number>(0);
   const [isPremium, setIsPremium] = useState<boolean>(false);
+  const [isProfilePublic, setIsProfilePublic] = useState<boolean>(false);
   const [savedEdits, setSavedEdits] = useState<SavedEdit[]>([]);
   const [generationHistory, setGenerationHistory] = useState<SavedEdit[]>([]);
 
@@ -38,6 +41,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUser({ name: parsed.name });
         setCredits(parsed.credits);
         setIsPremium(parsed.isPremium);
+        setIsProfilePublic(parsed.isProfilePublic || false);
         setSavedEdits(parsed.savedEdits || []);
         setGenerationHistory(parsed.generationHistory || []);
       }
@@ -61,12 +65,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       ...newUser,
       credits: 300,
       isPremium: false,
+      isProfilePublic: false,
       savedEdits: [],
       generationHistory: [],
     };
     setUser(newUser);
     setCredits(300);
     setIsPremium(false);
+    setIsProfilePublic(false);
     setSavedEdits([]);
     setGenerationHistory([]);
     persistUser(newUserData);
@@ -76,6 +82,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
     setCredits(0);
     setIsPremium(false);
+    setIsProfilePublic(false);
     setSavedEdits([]);
     setGenerationHistory([]);
     localStorage.removeItem(USER_STORAGE_KEY);
@@ -86,7 +93,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (credits >= amount) {
       const newCredits = credits - amount;
       setCredits(newCredits);
-      persistUser({ name: user?.name, credits: newCredits, isPremium, savedEdits, generationHistory });
+      persistUser({ name: user?.name, credits: newCredits, isPremium, isProfilePublic, savedEdits, generationHistory });
       return true;
     }
     return false;
@@ -94,7 +101,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const goPremium = () => {
     setIsPremium(true);
-    persistUser({ name: user?.name, credits, isPremium: true, savedEdits, generationHistory });
+    persistUser({ name: user?.name, credits, isPremium: true, isProfilePublic, savedEdits, generationHistory });
     alert("Congratulations! You are now a Premium user with unlimited edits. (This is a simulation)");
   };
   
@@ -102,21 +109,27 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const newEdit = { ...edit, id: new Date().toISOString() };
     const newSavedEdits = [...savedEdits, newEdit];
     setSavedEdits(newSavedEdits);
-    persistUser({ name: user?.name, credits, isPremium, savedEdits: newSavedEdits, generationHistory });
+    persistUser({ name: user?.name, credits, isPremium, isProfilePublic, savedEdits: newSavedEdits, generationHistory });
   };
 
   const logGeneration = (edit: Omit<SavedEdit, 'id'>) => {
     const newEntry = { ...edit, id: new Date().toISOString() };
     setGenerationHistory(prevHistory => {
         const newHistory = [...prevHistory, newEntry];
-        persistUser({ name: user?.name, credits, isPremium, savedEdits, generationHistory: newHistory });
+        persistUser({ name: user?.name, credits, isPremium, isProfilePublic, savedEdits, generationHistory: newHistory });
         return newHistory;
     });
   };
 
+  const toggleProfilePublic = () => {
+    const newStatus = !isProfilePublic;
+    setIsProfilePublic(newStatus);
+    persistUser({ name: user?.name, credits, isPremium, isProfilePublic: newStatus, savedEdits, generationHistory });
+  };
+
 
   return (
-    <UserContext.Provider value={{ user, credits, isPremium, savedEdits, generationHistory, login, logout, deductCredits, goPremium, saveEdit, logGeneration }}>
+    <UserContext.Provider value={{ user, credits, isPremium, isProfilePublic, savedEdits, generationHistory, login, logout, deductCredits, goPremium, saveEdit, logGeneration, toggleProfilePublic }}>
       {children}
     </UserContext.Provider>
   );

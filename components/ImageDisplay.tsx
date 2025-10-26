@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageIcon, RedoIcon } from './IconComponents';
+import { ImageIcon, RedoIcon, PlusIcon, MinusIcon } from './IconComponents';
 
 interface ImageDisplayProps {
   label: string;
@@ -9,12 +9,44 @@ interface ImageDisplayProps {
   onReset?: () => void;
   isResettable?: boolean;
   aspectRatio?: string;
+  constrainHeight?: boolean;
+  size?: number;
+  onSizeChange?: (newSize: number) => void;
 }
 
-export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, filterCss, backgroundColor, onReset, isResettable, aspectRatio }) => {
+const SizeControls: React.FC<{ size: number, onSizeChange: (newSize: number) => void }> = ({ size, onSizeChange }) => {
+    const handleDecrement = () => {
+        onSizeChange(Math.max(20, size - 10)); // Min size 20%
+    }
+    const handleIncrement = () => {
+        onSizeChange(Math.min(100, size + 10)); // Max size 100%
+    }
+
+    return (
+        <div className="absolute left-0 flex items-center gap-2">
+            <button 
+                onClick={handleDecrement}
+                disabled={size <= 20}
+                className="p-1 rounded-md bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Decrease size"
+            >
+                <MinusIcon className="w-4 h-4" />
+            </button>
+            <span className="text-sm font-mono text-[var(--text-secondary)] w-10 text-center">{size}%</span>
+             <button 
+                onClick={handleIncrement}
+                disabled={size >= 100}
+                className="p-1 rounded-md bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title="Increase size"
+            >
+                <PlusIcon className="w-4 h-4" />
+            </button>
+        </div>
+    )
+}
+
+export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, filterCss, backgroundColor, onReset, isResettable, aspectRatio, constrainHeight, size, onSizeChange }) => {
   const getAspectRatioClass = (ratio?: string) => {
-    // This function is used for generated variations with a forced aspect ratio,
-    // or for the placeholder.
     switch (ratio) {
         case '16:9': return 'aspect-[16/9]';
         case '9:16': return 'aspect-[9/16]';
@@ -23,8 +55,9 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
   }
     
   return (
-    <div className="w-full">
+    <div className="w-full transition-all duration-300" style={size ? { width: `${size}%`, margin: '0 auto' } : {}}>
       <div className="flex justify-center items-center mb-4 relative">
+        {onSizeChange && typeof size !== 'undefined' && <SizeControls size={size} onSizeChange={onSizeChange} />}
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">{label}</h2>
         {isResettable && onReset && (
              <button onClick={onReset} title="Reset to Original" className="absolute right-0 text-sm flex items-center gap-1 bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] px-2 py-1 rounded-md transition-colors">
@@ -34,17 +67,14 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
         )}
       </div>
       <div 
-        // Apply aspect ratio class only if it's explicitly provided OR if there's no image URL yet.
-        // This makes the placeholder square but lets the original image set its own aspect ratio.
-        className={`${(aspectRatio || !imageUrl) ? getAspectRatioClass(aspectRatio) : ''} w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)] transition-colors duration-300`}
+        className={`${(aspectRatio || !imageUrl) ? getAspectRatioClass(aspectRatio) : ''} w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)] transition-colors duration-300 ${constrainHeight ? 'max-h-[70vh]' : ''}`}
         style={{ backgroundColor }}
       >
         {imageUrl ? (
           <img 
             src={imageUrl} 
             alt={label} 
-            // If an aspect ratio is forced, cover the container. Otherwise, display the full image.
-            className={`transition-all duration-300 ${aspectRatio ? 'w-full h-full object-cover' : 'w-full h-auto'}`}
+            className={`transition-all duration-300 ${aspectRatio ? 'w-full h-full object-cover' : 'max-w-full max-h-full object-contain'}`}
             style={{ filter: filterCss }}
           />
         ) : (
