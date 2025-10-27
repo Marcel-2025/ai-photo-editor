@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ImageFile } from './types';
 import { editImageWithGemini } from './services/geminiService';
 import { Header } from './components/Header';
@@ -8,8 +8,7 @@ import { EditControls } from './components/EditControls';
 import { Loader } from './components/Loader';
 import { FilterControls, Filter } from './components/FilterControls';
 import { AspectRatioControls, AspectRatio } from './components/AspectRatioControls';
-// FIX: Removed unused 'StatsIcon' which was not exported from IconComponents.
-import { PaletteIcon, ImageIcon, UserIcon, CreditIcon, SparklesIcon, SaveIcon, PaintBrushIcon, SettingsIcon, ColorfulSparklesIcon, ColorfulSaveIcon, ColorfulHistoryIcon } from './components/IconComponents';
+import { PaletteIcon, ImageIcon, UserIcon, CreditIcon, SparklesIcon, SaveIcon, PaintBrushIcon, SettingsIcon, ColorfulSparklesIcon, ColorfulSaveIcon, ColorfulHistoryIcon, VideoIcon, EditIcon, UploadIcon } from './components/IconComponents';
 import { PromptSuggestions } from './components/PromptSuggestions';
 
 import { UserProvider, useUser } from './contexts/UserContext';
@@ -20,6 +19,9 @@ import { VariationsDisplay } from './components/VariationsDisplay';
 import { QualityControls, PortraitQuality } from './components/QualityControls';
 import { History } from './components/History';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { VideoGenerator } from './components/VideoGenerator';
+import { NavDrawer } from './components/NavDrawer';
+import { SettingsPage } from './components/SettingsPage';
 
 const FILTERS: Filter[] = [
   { name: 'None', css: 'none' },
@@ -134,10 +136,10 @@ const generateFilename = (prompt: string, aspectRatio: string): string => {
   const ratio = aspectRatio.replace(':', 'x');
   const timestamp = Date.now();
 
-  return `${finalPromptPart}-${ratio}-${timestamp}.jpg`;
+  return `${finalPromptPart}-${ratio}.jpg`;
 };
 
-interface PhotoEditorProps {
+interface ImageGeneratorProps {
     initialUpload: ImageFile | null;
     originalImage: ImageFile | null;
     generatedVariations: { [key: string]: string | undefined };
@@ -173,7 +175,7 @@ interface PhotoEditorProps {
 }
 
 
-const PhotoEditor: React.FC<PhotoEditorProps> = (props) => {
+const ImageGenerator: React.FC<ImageGeneratorProps> = (props) => {
     const {
         originalImage,
         generatedVariations,
@@ -388,7 +390,30 @@ const HomePage: React.FC = () => {
 };
 
 const DashboardPage: React.FC = () => {
-    const { user, credits, isPremium, isProfilePublic, toggleProfilePublic, generationHistory, savedEdits } = useUser();
+    const { user, credits, isPremium, isProfilePublic, toggleProfilePublic, generationHistory, savedEdits, updateUsername, updateProfilePicture } = useUser();
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [newName, setNewName] = useState(user?.name || '');
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handlePictureUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                if (reader.result) {
+                    updateProfilePicture(reader.result as string);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleNameSave = () => {
+        if (newName.trim() && user && newName.trim() !== user.name) {
+            updateUsername(newName.trim());
+        }
+        setIsEditingName(false);
+    };
     
     if (!user) return null;
 
@@ -416,8 +441,60 @@ const DashboardPage: React.FC = () => {
     return (
         <div className="max-w-7xl mx-auto px-2">
             <div className="text-center mb-12">
-                <UserIcon className="w-24 h-24 text-[var(--accent-primary)] mb-4 mx-auto" />
-                <h1 className="text-4xl font-bold text-[var(--text-primary)]">{user.name}</h1>
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handlePictureUpload}
+                    className="hidden"
+                    accept="image/png, image/jpeg, image/webp"
+                />
+                <div
+                    className="relative w-28 h-28 mx-auto mb-4 group cursor-pointer"
+                    onClick={() => fileInputRef.current?.click()}
+                    title="Change profile picture"
+                >
+                    {user.profilePicture ? (
+                        <img src={user.profilePicture} alt="Profile" className="w-full h-full rounded-full object-cover border-4 border-[var(--border-primary)]" />
+                    ) : (
+                        <div className="w-full h-full rounded-full border-4 border-dashed border-[var(--border-primary)] grid place-items-center">
+                            <UserIcon className="w-24 h-24 text-[var(--accent-primary)]" />
+                        </div>
+                    )}
+                    <div className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <UploadIcon className="w-8 h-8 text-white" />
+                    </div>
+                </div>
+
+                {!isEditingName ? (
+                    <div className="flex items-center justify-center gap-2">
+                        <h1 className="text-4xl font-bold text-[var(--text-primary)]">{user.name}</h1>
+                        <button 
+                            onClick={() => { setIsEditingName(true); setNewName(user.name); }} 
+                            className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--background-tertiary)] transition-colors"
+                            title="Edit name"
+                        >
+                            <EditIcon className="w-6 h-6" />
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center gap-2 max-w-sm mx-auto"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleNameSave();
+                            if (e.key === 'Escape') setIsEditingName(false);
+                        }}
+                    >
+                        <input
+                            type="text"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            className="flex-grow bg-[var(--background-secondary)] border border-[var(--border-secondary)] rounded-lg py-2 px-3 text-[var(--text-primary)] text-2xl font-bold text-center focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors"
+                            autoFocus
+                        />
+                        <button onClick={handleNameSave} className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save</button>
+                        <button onClick={() => setIsEditingName(false)} className="bg-[var(--danger-primary)] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[var(--danger-primary-hover)] transition-colors">Cancel</button>
+                    </div>
+                )}
+
                 {isPremium ? (
                     <p className="text-yellow-400 font-semibold mt-2 text-lg">Premium Member</p>
                 ) : (
@@ -474,10 +551,13 @@ const DashboardPage: React.FC = () => {
     );
 };
 
+type View = 'imageGenerator' | 'videoGenerator' | 'history' | 'dashboard' | 'settings';
+
 const AppContent: React.FC = () => {
   const { user, isPremium, credits, deductCredits, goPremium, saveEdit, logGeneration } = useUser();
   const { theme, background } = useTheme();
-  const [view, setView] = useState<'editor' | 'history' | 'dashboard'>('editor');
+  const [view, setView] = useState<View>('imageGenerator');
+  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
 
   const [initialUpload, setInitialUpload] = useState<ImageFile | null>(null);
   const [originalImage, setOriginalImage] = useState<ImageFile | null>(null);
@@ -499,9 +579,7 @@ const AppContent: React.FC = () => {
   
    useEffect(() => {
     if (background === 'particles') {
-      // FIX: Cast window to `any` to access `particlesJS` which is loaded from a script.
       if ((window as any).particlesJS) {
-        // FIX: Cast window to `any` to access `particlesJS` which is loaded from a script.
         (window as any).particlesJS('particles-js', {
           particles: {
             number: { value: 80, density: { enable: true, value_area: 800 } },
@@ -762,6 +840,11 @@ const AppContent: React.FC = () => {
       return '';
   }
 
+  const handleNavigate = (targetView: View) => {
+    setView(targetView);
+    setIsNavDrawerOpen(false);
+  };
+
   if (!user) {
     return <div className={`min-h-screen ${getBackgroundClass()}`}>
         <div id="particles-js"></div>
@@ -769,7 +852,7 @@ const AppContent: React.FC = () => {
     </div>;
   }
   
-  const photoEditorProps = {
+  const imageGeneratorProps = {
     initialUpload,
     originalImage,
     generatedVariations,
@@ -806,11 +889,22 @@ const AppContent: React.FC = () => {
   return (
      <div className={`min-h-screen font-sans relative ${getBackgroundClass()}`}>
         <div id="particles-js"></div>
-        <Header onNavigate={setView} currentView={view} />
+        <NavDrawer 
+          isOpen={isNavDrawerOpen} 
+          onClose={() => setIsNavDrawerOpen(false)}
+          onNavigate={handleNavigate}
+        />
+        <Header 
+          onNavigate={handleNavigate} 
+          currentView={view} 
+          onMenuClick={() => setIsNavDrawerOpen(true)}
+        />
         <main className="container mx-auto px-4 py-6 sm:py-8 relative z-10">
-            {view === 'editor' && <PhotoEditor {...photoEditorProps} />}
+            {view === 'imageGenerator' && <ImageGenerator {...imageGeneratorProps} />}
+            {view === 'videoGenerator' && <VideoGenerator />}
             {view === 'history' && <History />}
             {view === 'dashboard' && <DashboardPage />}
+            {view === 'settings' && <SettingsPage />}
         </main>
     </div>
   );

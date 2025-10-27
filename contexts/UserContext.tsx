@@ -3,6 +3,7 @@ import { SavedEdit } from '../types';
 
 interface User {
   name: string;
+  profilePicture: string | null;
 }
 
 interface UserContextType {
@@ -19,6 +20,8 @@ interface UserContextType {
   saveEdit: (edit: Omit<SavedEdit, 'id'>) => void;
   logGeneration: (edit: Omit<SavedEdit, 'id'>) => void;
   toggleProfilePublic: () => void;
+  updateUsername: (newName: string) => void;
+  updateProfilePicture: (imageUrl: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -38,7 +41,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const storedUser = localStorage.getItem(USER_STORAGE_KEY);
       if (storedUser) {
         const parsed = JSON.parse(storedUser);
-        setUser({ name: parsed.name });
+        setUser({ name: parsed.name, profilePicture: parsed.profilePicture || null });
         setCredits(parsed.credits);
         setIsPremium(parsed.isPremium);
         setIsProfilePublic(parsed.isProfilePublic || false);
@@ -60,7 +63,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const login = (username: string) => {
-    const newUser = { name: username };
+    const newUser = { name: username, profilePicture: null };
     const newUserData = {
       ...newUser,
       credits: 300,
@@ -93,7 +96,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (credits >= amount) {
       const newCredits = credits - amount;
       setCredits(newCredits);
-      persistUser({ name: user?.name, credits: newCredits, isPremium, isProfilePublic, savedEdits, generationHistory });
+      persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits: newCredits, isPremium, isProfilePublic, savedEdits, generationHistory });
       return true;
     }
     return false;
@@ -101,7 +104,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const goPremium = () => {
     setIsPremium(true);
-    persistUser({ name: user?.name, credits, isPremium: true, isProfilePublic, savedEdits, generationHistory });
+    persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium: true, isProfilePublic, savedEdits, generationHistory });
     alert("Congratulations! You are now a Premium user with unlimited edits. (This is a simulation)");
   };
   
@@ -109,14 +112,14 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const newEdit = { ...edit, id: new Date().toISOString() };
     const newSavedEdits = [...savedEdits, newEdit];
     setSavedEdits(newSavedEdits);
-    persistUser({ name: user?.name, credits, isPremium, isProfilePublic, savedEdits: newSavedEdits, generationHistory });
+    persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium, isProfilePublic, savedEdits: newSavedEdits, generationHistory });
   };
 
   const logGeneration = (edit: Omit<SavedEdit, 'id'>) => {
     const newEntry = { ...edit, id: new Date().toISOString() };
     setGenerationHistory(prevHistory => {
         const newHistory = [...prevHistory, newEntry];
-        persistUser({ name: user?.name, credits, isPremium, isProfilePublic, savedEdits, generationHistory: newHistory });
+        persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium, isProfilePublic, savedEdits, generationHistory: newHistory });
         return newHistory;
     });
   };
@@ -124,12 +127,43 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const toggleProfilePublic = () => {
     const newStatus = !isProfilePublic;
     setIsProfilePublic(newStatus);
-    persistUser({ name: user?.name, credits, isPremium, isProfilePublic: newStatus, savedEdits, generationHistory });
+    persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium, isProfilePublic: newStatus, savedEdits, generationHistory });
   };
 
+  const updateUsername = (newName: string) => {
+    if (user) {
+        const updatedUser = { ...user, name: newName };
+        setUser(updatedUser);
+        persistUser({ 
+            name: updatedUser.name, 
+            profilePicture: updatedUser.profilePicture,
+            credits, 
+            isPremium, 
+            isProfilePublic, 
+            savedEdits, 
+            generationHistory 
+        });
+    }
+  };
+
+  const updateProfilePicture = (imageUrl: string) => {
+      if (user) {
+          const updatedUser = { ...user, profilePicture: imageUrl };
+          setUser(updatedUser);
+          persistUser({ 
+              name: updatedUser.name, 
+              profilePicture: updatedUser.profilePicture,
+              credits, 
+              isPremium, 
+              isProfilePublic, 
+              savedEdits, 
+              generationHistory 
+          });
+      }
+  };
 
   return (
-    <UserContext.Provider value={{ user, credits, isPremium, isProfilePublic, savedEdits, generationHistory, login, logout, deductCredits, goPremium, saveEdit, logGeneration, toggleProfilePublic }}>
+    <UserContext.Provider value={{ user, credits, isPremium, isProfilePublic, savedEdits, generationHistory, login, logout, deductCredits, goPremium, saveEdit, logGeneration, toggleProfilePublic, updateUsername, updateProfilePicture }}>
       {children}
     </UserContext.Provider>
   );

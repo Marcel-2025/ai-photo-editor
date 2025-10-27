@@ -22,7 +22,18 @@ const neonColors = [
 
 export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestions, onSelect, disabled }) => {
   const { promptStyle } = useTheme();
-  const [activeCategory, setActiveCategory] = useState<string>(Object.keys(suggestions)[0]);
+  const [activeCategory, setActiveCategory] = useState<string>('');
+
+  useEffect(() => {
+    const categories = Object.keys(suggestions);
+    if (categories.length > 0 && !categories.includes(activeCategory)) {
+        setActiveCategory(categories[0]);
+    }
+  }, [suggestions, activeCategory]);
+
+  if (Object.keys(suggestions).length === 0) {
+    return null;
+  }
 
   return (
     <div className={`mt-8 transition-opacity ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
@@ -31,7 +42,8 @@ export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestion
         <h3 className="text-lg font-semibold text-[var(--text-primary)]">Prompt Ideas</h3>
       </div>
       
-      <div className="border-b border-[var(--border-secondary)] mb-4">
+      {/* Tabs for Mobile/Tablet */}
+      <div className="border-b border-[var(--border-secondary)] mb-4 md:hidden">
         <div className="-mb-px flex space-x-4 overflow-x-auto">
             {Object.keys(suggestions).map((category) => (
                 <button
@@ -49,12 +61,11 @@ export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestion
         </div>
       </div>
       
-      <div className="relative">
-        {Object.entries(suggestions).map(([category, prompts], catIndex) => {
-          return (
+      {/* Expanded view for Desktop */}
+      <div className="relative md:space-y-8">
+        {Object.entries(suggestions).map(([category, prompts]) => (
             <div key={category} className={`
               ${activeCategory === category ? 'block' : 'hidden md:block'}
-              ${catIndex > 0 ? 'md:mt-8' : ''}
             `}>
               <h4 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-4 text-center hidden md:block">{category}</h4>
               <div className="flex-1 min-h-[88px]">
@@ -81,8 +92,7 @@ export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestion
                   </div>
                 </div>
             </div>
-          )
-        })}
+        ))}
       </div>
     </div>
   );
