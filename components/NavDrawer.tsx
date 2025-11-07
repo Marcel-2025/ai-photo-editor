@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageIcon, VideoIcon, HistoryIcon, SettingsIcon, CloseIcon, SparklesIcon, HomeIcon } from './IconComponents';
+import { ImageIcon, VideoIcon, HistoryIcon, SettingsIcon, CloseIcon, HomeIcon, UserIcon } from './IconComponents';
 import { View } from '../App';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -15,12 +15,12 @@ export const NavDrawer: React.FC<NavDrawerProps> = ({ isOpen, onClose, onNavigat
   const { appIcon } = useTheme();
 
   const navItems: { view: View; label: string; icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
-    { view: 'feed', label: t('header.feed'), icon: SparklesIcon },
-    { view: 'imageGenerator', label: t('header.image'), icon: ImageIcon },
-    { view: 'videoGenerator', label: t('header.video'), icon: VideoIcon },
-    { view: 'history', label: t('header.history'), icon: HistoryIcon },
-    { view: 'dashboard', label: t('header.dashboard'), icon: HomeIcon },
-    { view: 'settings', label: t('header.settings'), icon: SettingsIcon },
+    { view: 'feed', label: t('nav.home'), icon: HomeIcon },
+    { view: 'imageGenerator', label: t('nav.imageGenerator'), icon: ImageIcon },
+    { view: 'videoGenerator', label: t('nav.videoGenerator'), icon: VideoIcon },
+    { view: 'history', label: t('nav.history'), icon: HistoryIcon },
+    { view: 'profile', label: t('nav.profile'), icon: UserIcon },
+    { view: 'settings', label: t('nav.settings'), icon: SettingsIcon },
   ];
 
   return (

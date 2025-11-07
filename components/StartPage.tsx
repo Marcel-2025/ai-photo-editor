@@ -7,11 +7,13 @@ import { BackgroundControls } from './BackgroundControls';
 import { ImageIcon, VideoIcon } from './IconComponents';
 import { PrivacyPolicyPage } from './PrivacyPolicyPage';
 import { DataDeletionPage } from './DataDeletionPage';
+import { ImpressumPage } from './ImpressumPage';
+import { ContactPage } from './ContactPage';
 import { useTheme } from '../contexts/ThemeContext';
 
 export const StartPage: React.FC = () => {
   const { t } = useTranslation();
-  const [page, setPage] = useState<'main' | 'privacy' | 'dataDeletion'>('main');
+  const [page, setPage] = useState<'main' | 'privacy' | 'dataDeletion' | 'impressum' | 'contact'>('main');
   const { appIcons, appIcon } = useTheme();
   const [currentIconIndex, setCurrentIconIndex] = useState(0);
 
@@ -27,6 +29,12 @@ export const StartPage: React.FC = () => {
   }
   if (page === 'dataDeletion') {
     return <DataDeletionPage onBack={() => setPage('main')} />;
+  }
+  if (page === 'impressum') {
+    return <ImpressumPage onBack={() => setPage('main')} />;
+  }
+  if (page === 'contact') {
+    return <ContactPage onBack={() => setPage('main')} />;
   }
 
   return (
@@ -99,6 +107,12 @@ export const StartPage: React.FC = () => {
                 <div className="space-x-4">
                     <button onClick={() => setPage('privacy')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline">
                     {t('footer.privacy')}
+                    </button>
+                     <button onClick={() => setPage('impressum')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline">
+                    {t('footer.imprint')}
+                    </button>
+                    <button onClick={() => setPage('contact')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline">
+                    {t('footer.contact')}
                     </button>
                     <button onClick={() => setPage('dataDeletion')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline">
                     {t('footer.dataDeletion')}

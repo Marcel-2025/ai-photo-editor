@@ -5,20 +5,20 @@
     "goPremium": "Go Premium",
     "credits": "Credits",
     "premium": "Premium",
-    "myDashboard": "My Dashboard",
     "logout": "Logout",
     "settings": "Settings",
     "history": "History",
-    "dashboard": "Dashboard",
-    "feed": "Feed"
+    "profile": "My Profile",
+    "home": "Home",
+    "searchPlaceholder": "Search for art, users..."
   },
   "nav": {
-    "dashboard": "Dashboard",
+    "profile": "Profile",
     "imageGenerator": "Image Generator",
     "videoGenerator": "Video Generator",
     "history": "History",
     "settings": "Settings",
-    "feed": "Feed"
+    "home": "Home"
   },
   "startPage": {
     "mainHeading1": "Create Stunning Visuals",
@@ -121,18 +121,21 @@
     },
     "downloadVideo": "Download Video"
   },
-  "dashboard": {
+  "profile": {
     "favoritesSaved": "Favorites Saved",
     "totalGenerations": "Total Generations",
     "creditsRemaining": "Credits Remaining",
     "premiumMember": "Premium Member",
     "freeMember": "Free Member",
-    "publicGallery": "Public Gallery",
-    "publicGalleryDesc": "When enabled, your saved favorites will be visible to others in the public feed.",
+    "publicGallery": "Public Profile",
+    "publicGalleryDesc": "When enabled, your saved favorites will be visible to others on your public profile and in the Home feed.",
     "changePicture": "Change profile picture",
     "editName": "Edit name",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "notFound": "User profile not found.",
+    "creations": "{{count}} public creations",
+    "noPublicPosts": "This user hasn't shared any public posts yet."
   },
   "settings": {
     "title": "Settings",
@@ -142,7 +145,9 @@
     "neonPrompts": "Neon Prompts",
     "language": "Language",
     "selectLanguage": "Select Language",
-    "legal": "Legal",
+    "legalAndContact": "Legal & Contact",
+    "imprint": "Imprint",
+    "contact": "Contact",
     "privacyPolicy": "Privacy Policy",
     "dataDeletion": "Data Deletion",
     "appIcon": "App Icon"
@@ -179,16 +184,11 @@
     "prompt": "Prompt:"
   },
   "feed": {
-    "title": "Public Feed",
+    "title": "Home Feed",
     "empty": "The feed is currently empty. Be the first to share something!",
     "loginToInteract": "Please log in to interact with posts.",
     "addCommentPrompt": "Add a comment...",
     "commentAdded": "Comment added (simulation)."
-  },
-  "profile": {
-    "notFound": "User profile not found.",
-    "creations": "{{count}} public creations",
-    "noPublicPosts": "This user hasn't shared any public posts yet."
   },
   "common": {
     "lightMode": "Light Mode",
@@ -199,11 +199,13 @@
     "aurora": "Aurora",
     "particles": "Particles",
     "back": "Back",
-    "backToFeed": "Back to Feed"
+    "backToHome": "Back to Home"
   },
   "footer": {
     "privacy": "Privacy Policy",
     "dataDeletion": "Data Deletion",
+    "imprint": "Imprint",
+    "contact": "Contact",
     "copyright": "© 2025 Ehhm.s. All Rights Reserved."
   },
   "privacyPage": {
@@ -239,5 +241,32 @@
     "p3": "To delete all of your data, you can simply clear your browser's cache and site data for this website. This will permanently remove all information associated with your use of the app. If you need assistance, please contact us at",
     "email": "privacy@lumina-ai.demo",
     "p4": "Clearing your site data is an irreversible action and will reset your account, credits, and all saved work."
+  },
+  "imprintPage": {
+    "title": "Imprint",
+    "content": [
+        {
+            "heading": "Information according to § 5 TMG",
+            "lines": [
+                "Max Mustermann (Demo)",
+                "Musterstraße 123",
+                "12345 Musterstadt",
+                "Germany"
+            ]
+        },
+        {
+            "heading": "Contact",
+            "lines": [
+                "Phone: +49 (0) 123 456789 (Demo)",
+                "Email: contact@lumina-ai.demo"
+            ]
+        }
+    ]
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "p1": "Have questions or need support? We're here to help!",
+    "p2": "For any inquiries, please reach out to our support team at",
+    "email": "support@lumina-ai.demo"
   }
 }

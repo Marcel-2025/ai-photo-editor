@@ -133,7 +133,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     persistUser({ ...user, credits, isPremium, isProfilePublic, savedEdits: newSavedEdits, generationHistory });
 
     if (isProfilePublic) {
-        addPostToFeed(newEdit);
+        // Fix: Cast to `Required<SavedEdit>` as `newEdit` is guaranteed to have user info, satisfying `addPostToFeed`.
+        addPostToFeed(newEdit as Required<SavedEdit>);
     }
   };
 
@@ -153,7 +154,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     persistUser({ ...user, credits, isPremium, isProfilePublic: newStatus, savedEdits, generationHistory });
 
     if (newStatus) {
-        savedEdits.forEach(edit => addPostToFeed(edit));
+        // Fix: Cast to `Required<SavedEdit>` as all `savedEdits` have user info, satisfying `addPostToFeed`.
+        savedEdits.forEach(edit => addPostToFeed(edit as Required<SavedEdit>));
     } else {
         removePostsByUserId(user.id);
     }

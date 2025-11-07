@@ -58,7 +58,7 @@ export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, on
                 className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-8 transition-colors"
             >
                 <ArrowLeftIcon className="w-5 h-5" />
-                {t('common.backToFeed')}
+                {t('common.backToHome')}
             </button>
             
             <div className="text-center mb-12">

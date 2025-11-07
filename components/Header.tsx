@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useUser } from '../contexts/UserContext';
 import { ThemeControls } from './ThemeControls';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { UserIcon, LogoutIcon, SettingsIcon, MenuIcon, ImageIcon, VideoIcon, HistoryIcon, HomeIcon, SparklesIcon } from './IconComponents';
+import { UserIcon, LogoutIcon, SettingsIcon, MenuIcon, ImageIcon, VideoIcon, HistoryIcon, HomeIcon, SearchIcon } from './IconComponents';
 import { View } from '../App';
 import { useTheme } from '../contexts/ThemeContext';
 import { PromptStyleSwitcher } from './PromptStyleSwitcher';
@@ -19,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, onMenuC
   const { user, credits, isPremium, logout } = useUser();
   const { appIcon } = useTheme();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, onMenuC
   }, []);
   
   const navItems: { view: View; label: string; icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
-      { view: 'feed', label: t('header.feed'), icon: SparklesIcon },
+      { view: 'feed', label: t('header.home'), icon: HomeIcon },
       { view: 'imageGenerator', label: t('header.image'), icon: ImageIcon },
       { view: 'videoGenerator', label: t('header.video'), icon: VideoIcon },
       { view: 'history', label: t('header.history'), icon: HistoryIcon },
@@ -69,10 +70,22 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, onMenuC
                     {item.label}
                 </button>
             ))}
+            <div className="relative ml-2 hidden lg:block">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <SearchIcon className="w-4 h-4 text-[var(--text-secondary)]" />
+              </div>
+              <input
+                type="text"
+                placeholder={t('header.searchPlaceholder')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full pl-9 pr-3 py-2 bg-[var(--background-secondary)] border border-[var(--border-secondary)] rounded-md text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-all"
+              />
+            </div>
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
                 <LanguageSwitcher />
                 <PromptStyleSwitcher />
                 <ThemeControls />
@@ -84,14 +97,6 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, onMenuC
                     <SettingsIcon className="w-5 h-5" />
                 </button>
             </div>
-
-            <button
-                onClick={() => onNavigate('dashboard')}
-                title={t('header.dashboard')}
-                className={`hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${currentView === 'dashboard' ? 'bg-[var(--background-secondary)] text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--background-secondary)] hover:text-[var(--text-primary)]'}`}
-            >
-                <HomeIcon className="w-5 h-5" />
-            </button>
 
             <div className="relative" ref={userMenuRef}>
               <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className="flex items-center gap-2 text-left p-1 rounded-full hover:bg-[var(--background-secondary)] transition-colors">
@@ -118,7 +123,11 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, onMenuC
                          {isPremium ? t('header.premium') : `${credits} ${t('header.credits')}`}
                        </p>
                     </div>
-                     <button onClick={() => { onNavigate('settings'); setIsUserMenuOpen(false); }} className="w-full text-left flex items-center gap-3 px-2 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-primary)] rounded-md transition-colors mt-1">
+                     <button onClick={() => { onNavigate('profile'); setIsUserMenuOpen(false); }} className="w-full text-left flex items-center gap-3 px-2 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-primary)] rounded-md transition-colors mt-1">
+                      <UserIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                      {t('header.profile')}
+                    </button>
+                     <button onClick={() => { onNavigate('settings'); setIsUserMenuOpen(false); }} className="w-full text-left flex items-center gap-3 px-2 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-primary)] rounded-md transition-colors">
                       <SettingsIcon className="w-5 h-5 text-[var(--text-secondary)]" />
                       {t('header.settings')}
                     </button>

@@ -5,20 +5,20 @@
     "goPremium": "Premium werden",
     "credits": "Credits",
     "premium": "Premium",
-    "myDashboard": "Mein Dashboard",
     "logout": "Abmelden",
     "settings": "Einstellungen",
     "history": "Verlauf",
-    "dashboard": "Dashboard",
-    "feed": "Feed"
+    "profile": "Mein Profil",
+    "home": "Startseite",
+    "searchPlaceholder": "Suche nach Kunst, Benutzern..."
   },
   "nav": {
-    "dashboard": "Dashboard",
+    "profile": "Profil",
     "imageGenerator": "Bild-Generator",
     "videoGenerator": "Video-Generator",
     "history": "Verlauf",
     "settings": "Einstellungen",
-    "feed": "Feed"
+    "home": "Startseite"
   },
   "startPage": {
     "mainHeading1": "Erstellen Sie atemberaubende Visuals",
@@ -121,18 +121,21 @@
     },
     "downloadVideo": "Video herunterladen"
   },
-  "dashboard": {
+  "profile": {
     "favoritesSaved": "Gespeicherte Favoriten",
     "totalGenerations": "Generierungen gesamt",
     "creditsRemaining": "Verbleibende Credits",
     "premiumMember": "Premium-Mitglied",
     "freeMember": "Kostenloses Mitglied",
-    "publicGallery": "Öffentliche Galerie",
-    "publicGalleryDesc": "Wenn aktiviert, sind deine gespeicherten Favoriten für andere im öffentlichen Feed sichtbar.",
+    "publicGallery": "Öffentliches Profil",
+    "publicGalleryDesc": "Wenn aktiviert, sind deine gespeicherten Favoriten für andere auf deinem öffentlichen Profil und im Home-Feed sichtbar.",
     "changePicture": "Profilbild ändern",
     "editName": "Name bearbeiten",
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "notFound": "Benutzerprofil nicht gefunden.",
+    "creations": "{{count}} öffentliche Kreationen",
+    "noPublicPosts": "Dieser Benutzer hat noch keine öffentlichen Beiträge geteilt."
   },
   "settings": {
     "title": "Einstellungen",
@@ -142,7 +145,9 @@
     "neonPrompts": "Neon-Prompts",
     "language": "Sprache",
     "selectLanguage": "Sprache auswählen",
-    "legal": "Rechtliches",
+    "legalAndContact": "Rechtliches & Kontakt",
+    "imprint": "Impressum",
+    "contact": "Kontakt",
     "privacyPolicy": "Datenschutzrichtlinie",
     "dataDeletion": "Datenlöschung",
     "appIcon": "App-Symbol"
@@ -179,16 +184,11 @@
     "prompt": "Prompt:"
   },
     "feed": {
-    "title": "Öffentlicher Feed",
+    "title": "Home-Feed",
     "empty": "Der Feed ist derzeit leer. Sei der Erste, der etwas teilt!",
     "loginToInteract": "Bitte melde dich an, um mit Beiträgen zu interagieren.",
     "addCommentPrompt": "Einen Kommentar hinzufügen...",
     "commentAdded": "Kommentar hinzugefügt (Simulation)."
-  },
-  "profile": {
-    "notFound": "Benutzerprofil nicht gefunden.",
-    "creations": "{{count}} öffentliche Kreationen",
-    "noPublicPosts": "Dieser Benutzer hat noch keine öffentlichen Beiträge geteilt."
   },
   "common": {
     "lightMode": "Heller Modus",
@@ -199,11 +199,13 @@
     "aurora": "Aurora",
     "particles": "Partikel",
     "back": "Zurück",
-    "backToFeed": "Zurück zum Feed"
+    "backToHome": "Zurück zur Startseite"
   },
   "footer": {
     "privacy": "Datenschutzrichtlinie",
     "dataDeletion": "Datenlöschung",
+    "imprint": "Impressum",
+    "contact": "Kontakt",
     "copyright": "© 2025 Ehhm.s. Alle Rechte vorbehalten."
   },
   "privacyPage": {
@@ -239,5 +241,32 @@
     "p3": "Um alle Ihre Daten zu löschen, können Sie einfach den Cache und die Website-Daten Ihres Browsers für diese Website leeren. Dadurch werden alle mit Ihrer Nutzung der App verbundenen Informationen dauerhaft entfernt. Wenn Sie Hilfe benötigen, kontaktieren Sie uns bitte unter",
     "email": "privacy@lumina-ai.demo",
     "p4": "Das Leeren Ihrer Website-Daten ist eine unumkehrbare Aktion und setzt Ihr Konto, Ihre Credits und alle gespeicherten Arbeiten zurück."
+  },
+   "imprintPage": {
+    "title": "Impressum",
+    "content": [
+        {
+            "heading": "Angaben gemäß § 5 TMG",
+            "lines": [
+                "Max Mustermann (Demo)",
+                "Musterstraße 123",
+                "12345 Musterstadt",
+                "Deutschland"
+            ]
+        },
+        {
+            "heading": "Kontakt",
+            "lines": [
+                "Telefon: +49 (0) 123 456789 (Demo)",
+                "E-Mail: contact@lumina-ai.demo"
+            ]
+        }
+    ]
+  },
+  "contactPage": {
+    "title": "Kontaktieren Sie uns",
+    "p1": "Haben Sie Fragen oder benötigen Sie Unterstützung? Wir sind hier, um zu helfen!",
+    "p2": "Bei allen Anfragen wenden Sie sich bitte an unser Support-Team unter",
+    "email": "support@lumina-ai.demo"
   }
 }

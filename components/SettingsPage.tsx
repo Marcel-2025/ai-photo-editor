@@ -4,7 +4,7 @@ import { ThemeControls } from './ThemeControls';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { BackgroundControls } from './BackgroundControls';
 import { PromptStyleSwitcher } from './PromptStyleSwitcher';
-import { SettingsIcon, ArrowRightIcon } from './IconComponents';
+import { SettingsIcon, ArrowRightIcon, MailIcon } from './IconComponents';
 import { View } from '../App';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -71,11 +71,19 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
                 </div>
 
                 <div className="bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-xl p-6 shadow-lg">
-                     <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">{t('settings.legal')}</h2>
+                     <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">{t('settings.legalAndContact')}</h2>
                     <div className="space-y-3">
                         <button onClick={() => onNavigate('privacy')} className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-[var(--border-primary)] transition-colors">
                             <span className="text-[var(--text-primary)]">{t('settings.privacyPolicy')}</span>
                             <ArrowRightIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        </button>
+                        <button onClick={() => onNavigate('impressum')} className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-[var(--border-primary)] transition-colors">
+                            <span className="text-[var(--text-primary)]">{t('settings.imprint')}</span>
+                            <ArrowRightIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        </button>
+                         <button onClick={() => onNavigate('contact')} className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-[var(--border-primary)] transition-colors">
+                            <span className="text-[var(--text-primary)]">{t('settings.contact')}</span>
+                            <MailIcon className="w-5 h-5 text-[var(--text-secondary)]" />
                         </button>
                         <button onClick={() => onNavigate('dataDeletion')} className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-[var(--border-primary)] transition-colors">
                              <span className="text-[var(--text-primary)]">{t('settings.dataDeletion')}</span>
