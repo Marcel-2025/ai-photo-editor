@@ -1,7 +1,10 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { SavedEdit } from '../types';
+import i18n from '../i18n';
+import { addPostToFeed, removePostsByUserId, toggleLikeOnPost, addCommentToPost, sharePost } from '../services/publicFeedService';
 
 interface User {
+  id: string; // Unique ID for the user
   name: string;
   profilePicture: string | null;
 }
@@ -17,11 +20,15 @@ interface UserContextType {
   logout: () => void;
   deductCredits: (amount: number) => boolean;
   goPremium: () => void;
-  saveEdit: (edit: Omit<SavedEdit, 'id'>) => void;
+  saveEdit: (edit: Omit<SavedEdit, 'id' | 'userId' | 'userName' | 'userProfilePicture'>) => void;
   logGeneration: (edit: Omit<SavedEdit, 'id'>) => void;
   toggleProfilePublic: () => void;
   updateUsername: (newName: string) => void;
   updateProfilePicture: (imageUrl: string) => void;
+  // Social Actions
+  toggleLike: (postId: string) => void;
+  addComment: (postId: string, text: string) => void;
+  share: (postId: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -41,7 +48,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const storedUser = localStorage.getItem(USER_STORAGE_KEY);
       if (storedUser) {
         const parsed = JSON.parse(storedUser);
-        setUser({ name: parsed.name, profilePicture: parsed.profilePicture || null });
+        setUser({ id: parsed.id || parsed.name, name: parsed.name, profilePicture: parsed.profilePicture || null });
         setCredits(parsed.credits);
         setIsPremium(parsed.isPremium);
         setIsProfilePublic(parsed.isProfilePublic || false);
@@ -63,7 +70,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const login = (username: string) => {
-    const newUser = { name: username, profilePicture: null };
+    const userId = username.toLowerCase().replace(/\s/g, '_');
+    const newUser = { id: userId, name: username, profilePicture: `https://avatar.iran.liara.run/public/boy?username=${encodeURIComponent(username)}` };
     const newUserData = {
       ...newUser,
       credits: 300,
@@ -82,6 +90,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = () => {
+    if (user && isProfilePublic) {
+        removePostsByUserId(user.id);
+    }
     setUser(null);
     setCredits(0);
     setIsPremium(false);
@@ -96,7 +107,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (credits >= amount) {
       const newCredits = credits - amount;
       setCredits(newCredits);
-      persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits: newCredits, isPremium, isProfilePublic, savedEdits, generationHistory });
+      persistUser({ ...user, credits: newCredits, isPremium, isProfilePublic, savedEdits, generationHistory });
       return true;
     }
     return false;
@@ -104,30 +115,48 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const goPremium = () => {
     setIsPremium(true);
-    persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium: true, isProfilePublic, savedEdits, generationHistory });
-    alert("Congratulations! You are now a Premium user with unlimited edits. (This is a simulation)");
+    persistUser({ ...user, credits, isPremium: true, isProfilePublic, savedEdits, generationHistory });
+    alert(i18n.t('premiumModal.alert'));
   };
   
-  const saveEdit = (edit: Omit<SavedEdit, 'id'>) => {
-    const newEdit = { ...edit, id: new Date().toISOString() };
+  const saveEdit = (edit: Omit<SavedEdit, 'id' | 'userId' | 'userName' | 'userProfilePicture'>) => {
+    if (!user) return;
+    const newEdit: SavedEdit = { 
+        ...edit, 
+        id: new Date().toISOString(),
+        userId: user.id,
+        userName: user.name,
+        userProfilePicture: user.profilePicture
+    };
     const newSavedEdits = [...savedEdits, newEdit];
     setSavedEdits(newSavedEdits);
-    persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium, isProfilePublic, savedEdits: newSavedEdits, generationHistory });
+    persistUser({ ...user, credits, isPremium, isProfilePublic, savedEdits: newSavedEdits, generationHistory });
+
+    if (isProfilePublic) {
+        addPostToFeed(newEdit);
+    }
   };
 
   const logGeneration = (edit: Omit<SavedEdit, 'id'>) => {
     const newEntry = { ...edit, id: new Date().toISOString() };
     setGenerationHistory(prevHistory => {
         const newHistory = [...prevHistory, newEntry];
-        persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium, isProfilePublic, savedEdits, generationHistory: newHistory });
+        persistUser({ ...user, credits, isPremium, isProfilePublic, savedEdits, generationHistory: newHistory });
         return newHistory;
     });
   };
 
   const toggleProfilePublic = () => {
+    if (!user) return;
     const newStatus = !isProfilePublic;
     setIsProfilePublic(newStatus);
-    persistUser({ name: user?.name, profilePicture: user?.profilePicture, credits, isPremium, isProfilePublic: newStatus, savedEdits, generationHistory });
+    persistUser({ ...user, credits, isPremium, isProfilePublic: newStatus, savedEdits, generationHistory });
+
+    if (newStatus) {
+        savedEdits.forEach(edit => addPostToFeed(edit));
+    } else {
+        removePostsByUserId(user.id);
+    }
   };
 
   const updateUsername = (newName: string) => {
@@ -135,8 +164,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const updatedUser = { ...user, name: newName };
         setUser(updatedUser);
         persistUser({ 
-            name: updatedUser.name, 
-            profilePicture: updatedUser.profilePicture,
+            ...updatedUser,
             credits, 
             isPremium, 
             isProfilePublic, 
@@ -151,8 +179,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           const updatedUser = { ...user, profilePicture: imageUrl };
           setUser(updatedUser);
           persistUser({ 
-              name: updatedUser.name, 
-              profilePicture: updatedUser.profilePicture,
+              ...updatedUser,
               credits, 
               isPremium, 
               isProfilePublic, 
@@ -162,8 +189,31 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
   };
 
+  // Social Actions
+  const toggleLike = (postId: string) => {
+    if (!user) return;
+    toggleLikeOnPost(postId, user.id);
+  };
+
+  const addComment = (postId: string, text: string) => {
+    if (!user) return;
+    const comment = {
+        id: new Date().toISOString(),
+        userId: user.id,
+        userName: user.name,
+        text,
+        timestamp: new Date().toISOString()
+    };
+    addCommentToPost(postId, comment);
+  };
+  
+  const share = (postId: string) => {
+    sharePost(postId);
+    alert('Link copied to clipboard (simulation)');
+  };
+
   return (
-    <UserContext.Provider value={{ user, credits, isPremium, isProfilePublic, savedEdits, generationHistory, login, logout, deductCredits, goPremium, saveEdit, logGeneration, toggleProfilePublic, updateUsername, updateProfilePicture }}>
+    <UserContext.Provider value={{ user, credits, isPremium, isProfilePublic, savedEdits, generationHistory, login, logout, deductCredits, goPremium, saveEdit, logGeneration, toggleProfilePublic, updateUsername, updateProfilePicture, toggleLike, addComment, share }}>
       {children}
     </UserContext.Provider>
   );

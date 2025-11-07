@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FilterIcon } from './IconComponents';
 
 export interface Filter {
@@ -17,12 +18,13 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
   activeFilter,
   onSelectFilter,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center">
       <div className="flex items-center justify-center gap-2 mb-3">
         <FilterIcon className="w-5 h-5 text-[var(--text-secondary)]" />
         <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-          Apply a Filter
+          {t('imageGenerator.applyFilter')}
         </h3>
       </div>
       <div className="flex flex-wrap justify-center gap-3">

@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { UserIcon, SettingsIcon, ColorfulSparklesIcon, ColorfulSaveIcon, ColorfulHistoryIcon, EditIcon, UploadIcon } from './IconComponents';
 import { useUser } from '../contexts/UserContext';
 import { Favorites } from './Gallery';
 
 export const DashboardPage: React.FC = () => {
+    const { t } = useTranslation();
     const { user, credits, isPremium, isProfilePublic, toggleProfilePublic, generationHistory, savedEdits, updateUsername, updateProfilePicture } = useUser();
     const [isEditingName, setIsEditingName] = useState(false);
     const [newName, setNewName] = useState(user?.name || '');
@@ -34,19 +36,19 @@ export const DashboardPage: React.FC = () => {
     const statCards = [
         {
             icon: ColorfulSaveIcon,
-            label: "Favorites Saved",
+            label: t('dashboard.favoritesSaved'),
             value: savedEdits.length,
             color: "cyan"
         },
         {
             icon: ColorfulHistoryIcon,
-            label: "Total Generations",
+            label: t('dashboard.totalGenerations'),
             value: generationHistory.length,
             color: "pink"
         },
         ...(!isPremium ? [{
             icon: ColorfulSparklesIcon,
-            label: "Credits Remaining",
+            label: t('dashboard.creditsRemaining'),
             value: credits,
             color: "lime"
         }] : [])
@@ -65,7 +67,7 @@ export const DashboardPage: React.FC = () => {
                 <div
                     className="relative w-28 h-28 mx-auto mb-4 group cursor-pointer"
                     onClick={() => fileInputRef.current?.click()}
-                    title="Change profile picture"
+                    title={t('dashboard.changePicture')}
                 >
                     {user.profilePicture ? (
                         <img src={user.profilePicture} alt="Profile" className="w-full h-full rounded-full object-cover border-4 border-[var(--border-primary)]" />
@@ -85,7 +87,7 @@ export const DashboardPage: React.FC = () => {
                         <button 
                             onClick={() => { setIsEditingName(true); setNewName(user.name); }} 
                             className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full hover:bg-[var(--background-tertiary)] transition-colors"
-                            title="Edit name"
+                            title={t('dashboard.editName')}
                         >
                             <EditIcon className="w-6 h-6" />
                         </button>
@@ -104,15 +106,15 @@ export const DashboardPage: React.FC = () => {
                             className="flex-grow bg-[var(--background-secondary)] border border-[var(--border-secondary)] rounded-lg py-2 px-3 text-[var(--text-primary)] text-2xl font-bold text-center focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors"
                             autoFocus
                         />
-                        <button onClick={handleNameSave} className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">Save</button>
-                        <button onClick={() => setIsEditingName(false)} className="bg-[var(--danger-primary)] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[var(--danger-primary-hover)] transition-colors">Cancel</button>
+                        <button onClick={handleNameSave} className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">{t('dashboard.save')}</button>
+                        <button onClick={() => setIsEditingName(false)} className="bg-[var(--danger-primary)] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[var(--danger-primary-hover)] transition-colors">{t('dashboard.cancel')}</button>
                     </div>
                 )}
 
                 {isPremium ? (
-                    <p className="text-yellow-400 font-semibold mt-2 text-lg">Premium Member</p>
+                    <p className="text-yellow-400 font-semibold mt-2 text-lg">{t('dashboard.premiumMember')}</p>
                 ) : (
-                    <p className="text-[var(--text-secondary)] mt-2 text-lg">Free Member</p>
+                    <p className="text-[var(--text-secondary)] mt-2 text-lg">{t('dashboard.freeMember')}</p>
                 )}
             </div>
 
@@ -136,7 +138,7 @@ export const DashboardPage: React.FC = () => {
                         <div className="flex items-center gap-3">
                             <SettingsIcon className="w-6 h-6 text-purple-400" />
                             <label htmlFor="public-profile-toggle" className="text-lg font-medium text-[var(--text-primary)] cursor-pointer">
-                                Public Gallery
+                                {t('dashboard.publicGallery')}
                             </label>
                         </div>
                         <button
@@ -156,7 +158,7 @@ export const DashboardPage: React.FC = () => {
                             />
                         </button>
                     </div>
-                     <p className="text-sm text-[var(--text-secondary)]/80 mt-3 text-center">Toggle to make your favorites gallery visible to others (feature coming soon).</p>
+                     <p className="text-sm text-[var(--text-secondary)]/80 mt-3 text-center">{t('dashboard.publicGalleryDesc')}</p>
                 </div>
             </div>
 

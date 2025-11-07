@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUser } from '../contexts/UserContext';
 import { SparklesIcon, GoogleIcon, FacebookIcon, CloseIcon } from './IconComponents';
 
@@ -7,6 +8,7 @@ interface LoginProps {
 }
 
 export const Login: React.FC<LoginProps> = ({ onClose }) => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const { login } = useUser();
 
@@ -33,10 +35,11 @@ export const Login: React.FC<LoginProps> = ({ onClose }) => {
       <div className="flex flex-col items-center">
         <SparklesIcon className="w-16 h-16 text-[var(--accent-primary)] mb-4" />
         <h1 className="text-3xl font-bold tracking-tight text-[var(--text-primary)] text-center">
-          AI Photo Editor
+          Lumina AI
         </h1>
         <p className="mt-2 text-center text-[var(--text-secondary)]">
-          Sign in to start creating. New users get 300 free credits!
+          {t('login.title1')}
+          <span className="block">{t('login.title2')}</span>
         </p>
       </div>
       
@@ -47,7 +50,7 @@ export const Login: React.FC<LoginProps> = ({ onClose }) => {
               className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-[var(--border-secondary)] rounded-md text-sm font-medium text-[var(--text-primary)] bg-[var(--background-primary)] hover:bg-[var(--border-primary)] transition-colors"
           >
               <GoogleIcon className="w-5 h-5" />
-              Continue with Google
+              {t('login.google')}
           </button>
             <button
               type="button"
@@ -55,13 +58,13 @@ export const Login: React.FC<LoginProps> = ({ onClose }) => {
               className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-[var(--border-secondary)] rounded-md text-sm font-medium text-[var(--text-primary)] bg-[var(--background-primary)] hover:bg-[var(--border-primary)] transition-colors"
           >
               <FacebookIcon className="w-5 h-5" />
-              Continue with Facebook
+              {t('login.facebook')}
           </button>
       </div>
 
       <div className="flex items-center justify-center space-x-2">
           <hr className="w-full border-t border-[var(--border-secondary)]" />
-          <span className="text-xs text-[var(--text-secondary)] uppercase">OR</span>
+          <span className="text-xs text-[var(--text-secondary)] uppercase">{t('login.or')}</span>
           <hr className="w-full border-t border-[var(--border-secondary)]" />
       </div>
 
@@ -69,7 +72,7 @@ export const Login: React.FC<LoginProps> = ({ onClose }) => {
         <div className="rounded-md shadow-sm">
           <div>
             <label htmlFor="username" className="sr-only">
-              Username
+              {t('login.usernamePlaceholder')}
             </label>
             <input
               id="username"
@@ -77,7 +80,7 @@ export const Login: React.FC<LoginProps> = ({ onClose }) => {
               type="text"
               required
               className="appearance-none rounded-md relative block w-full px-3 py-3 border border-[var(--border-secondary)] bg-[var(--background-primary)] placeholder-[var(--text-secondary)] text-[var(--text-primary)] focus:outline-none focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] focus:z-10 sm:text-sm"
-              placeholder="Enter your username"
+              placeholder={t('login.usernamePlaceholder')}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -88,13 +91,13 @@ export const Login: React.FC<LoginProps> = ({ onClose }) => {
             type="submit"
             className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[var(--accent-primary)] hover:bg-[var(--accent-primary-hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--background-secondary)] focus:ring-[var(--accent-primary)]"
           >
-            Sign in or Create Account
+            {t('login.signIn')}
           </button>
         </div>
       </form>
         <div className="text-center text-xs text-[var(--text-secondary)]/80 mt-6">
-          <p>This is a demo application. No password is required.</p>
-          <p>Account data is stored in your browser's local storage.</p>
+          <p>{t('login.demoInfo1')}</p>
+          <p>{t('login.demoInfo2')}</p>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ImageIcon, RedoIcon, PlusIcon, MinusIcon } from './IconComponents';
 
 interface ImageDisplayProps {
@@ -46,6 +47,7 @@ const SizeControls: React.FC<{ size: number, onSizeChange: (newSize: number) => 
 }
 
 export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, filterCss, backgroundColor, onReset, isResettable, aspectRatio, constrainHeight, size, onSizeChange }) => {
+  const { t } = useTranslation();
   const getAspectRatioClass = (ratio?: string) => {
     switch (ratio) {
         case '16:9': return 'aspect-[16/9]';
@@ -60,9 +62,9 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
         {onSizeChange && typeof size !== 'undefined' && <SizeControls size={size} onSizeChange={onSizeChange} />}
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">{label}</h2>
         {isResettable && onReset && (
-             <button onClick={onReset} title="Reset to Original" className="absolute right-0 text-sm flex items-center gap-1 bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] px-2 py-1 rounded-md transition-colors">
+             <button onClick={onReset} title={t('imageGenerator.reset')} className="absolute right-0 text-sm flex items-center gap-1 bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)] text-[var(--text-primary)] px-2 py-1 rounded-md transition-colors">
                 <RedoIcon className="w-4 h-4 transform -scale-x-100" />
-                Reset
+                {t('imageGenerator.reset')}
              </button>
         )}
       </div>
@@ -80,7 +82,7 @@ export const ImageDisplay: React.FC<ImageDisplayProps> = ({ label, imageUrl, fil
         ) : (
           <div className="text-[var(--text-secondary)] flex flex-col items-center">
             <ImageIcon className="w-16 h-16" />
-            <p className="mt-2">{label} image will appear here</p>
+            <p className="mt-2">{t('imageGenerator.imageWillAppear', { label })}</p>
           </div>
         )}
       </div>

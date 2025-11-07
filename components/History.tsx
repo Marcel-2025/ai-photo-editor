@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUser } from '../contexts/UserContext';
 import { ImageIcon, HistoryIcon, CloseIcon } from './IconComponents';
 import { SavedEdit } from '../types';
 
 export const History: React.FC = () => {
+  const { t } = useTranslation();
   const { generationHistory } = useUser();
   const [selectedImage, setSelectedImage] = useState<SavedEdit | null>(null);
 
@@ -26,7 +28,7 @@ export const History: React.FC = () => {
         <div className="flex items-center justify-center gap-2 sm:gap-3 mb-8">
           <HistoryIcon className="w-8 h-8 text-[var(--accent-primary)]" />
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] text-center">
-            My Generation History
+            {t('history.title')}
           </h1>
         </div>
 
@@ -54,9 +56,9 @@ export const History: React.FC = () => {
         ) : (
           <div className="text-center py-20 text-[var(--text-secondary)] bg-[var(--background-tertiary)] border-2 border-dashed border-[var(--border-secondary)] rounded-xl">
             <ImageIcon className="w-16 h-16 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold">No History Found</h2>
+            <h2 className="text-xl font-semibold">{t('history.noHistoryTitle')}</h2>
             <p className="mt-2">
-              Your saved generations will appear here once you create them.
+              {t('history.noHistoryDesc')}
             </p>
           </div>
         )}
@@ -73,7 +75,7 @@ export const History: React.FC = () => {
           >
             <div className="p-4 border-b border-[var(--border-primary)] flex-shrink-0">
               <p className="text-[var(--text-primary)]">
-                <span className="font-semibold text-[var(--text-primary)]">Prompt:</span>{' '}
+                <span className="font-semibold text-[var(--text-primary)]">{t('history.prompt')}</span>{' '}
                 {selectedImage.prompt}
               </p>
               <p className="text-xs text-[var(--text-secondary)] mt-1">
@@ -89,7 +91,7 @@ export const History: React.FC = () => {
             </div>
             <button
               onClick={() => setSelectedImage(null)}
-              title="Close"
+              title={t('history.close')}
               className="absolute top-3 right-3 bg-[var(--background-tertiary)] text-[var(--text-secondary)] rounded-full p-2 hover:bg-[var(--border-primary)] hover:text-[var(--text-primary)] transition-colors"
             >
               <CloseIcon className="w-5 h-5" />

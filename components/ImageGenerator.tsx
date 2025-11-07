@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ImageFile } from '../types';
 import { editImageWithGemini } from '../services/geminiService';
 import { ImageUploader } from './ImageUploader';
@@ -15,70 +16,6 @@ import { VariationsDisplay } from './VariationsDisplay';
 import { QualityControls, PortraitQuality } from './QualityControls';
 import { useTheme } from '../contexts/ThemeContext';
 
-const FILTERS: Filter[] = [
-  { name: 'None', css: 'none' },
-  { name: 'Grayscale', css: 'grayscale(100%)' },
-  { name: 'Sepia', css: 'sepia(100%)' },
-  { name: 'Invert', css: 'invert(100%)' },
-  { name: 'Vintage', css: 'sepia(60%) contrast(110%) brightness(90%)' },
-  { name: 'Noir', css: 'grayscale(100%) contrast(130%) brightness(90%)' },
-];
-
-const ASPECT_RATIOS: AspectRatio[] = [
-    { name: 'Square', value: '1:1' },
-    { name: 'Landscape', value: '16:9' },
-    { name: 'Portrait', value: '9:16' },
-];
-
-const QUALITIES: PortraitQuality[] = [
-    { name: 'HD (720p)', value: 'hd' },
-    { name: 'FHD (1080p)', value: 'fhd' },
-];
-
-const PROMPT_SUGGESTIONS: { [category: string]: string[] } = {
-    "Artistic Styles": [
-        "in the style of an oil painting",
-        "make it cartoonish",
-        "in the style of a detailed anime drawing",
-        "as a watercolor painting",
-        "in a pixel art style",
-        "as a black and white sketch",
-        "in a pop-art style like Andy Warhol",
-        "in a vintage comic book style",
-    ],
-    "Lighting & Mood": [
-        "with dramatic, cinematic lighting",
-        "make it look moody",
-        "add a cheerful atmosphere",
-        "with soft, golden hour lighting",
-        "with mysterious, foggy lighting",
-        "with neon, cyberpunk lighting",
-        "make it bright and sunny",
-        "with a spooky, eerie glow",
-    ],
-    "Scene & Background": [
-        "Extend the image",
-        "change the background to a cyberpunk city",
-        "place the subject on Mars",
-        "make it nighttime",
-        "add rain",
-        "change the background to a lush jungle",
-        "put them in an underwater scene",
-        "change the background to a futuristic space station",
-    ],
-    "Character & Clothing": [
-        "Change the clothes",
-        "Add tattoos",
-        "add a superhero cape",
-        "change the clothes to a futuristic sci-fi suit",
-        "give the person majestic wings",
-        "change the clothes to elegant royal attire",
-        "add a fantasy-style helmet",
-        "make the person look like a cyborg",
-    ],
-};
-
-
 interface BackgroundControlsProps {
   color: string;
   onColorChange: (color: string) => void;
@@ -86,12 +23,13 @@ interface BackgroundControlsProps {
 }
 
 const BackgroundControls: React.FC<BackgroundControlsProps> = ({ color, onColorChange, disabled }) => {
+  const { t } = useTranslation();
   return (
     <div className={`bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center transition-opacity ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
       <div className="flex items-center justify-center gap-2 mb-3">
         <PaletteIcon className="w-5 h-5 text-[var(--text-secondary)]" />
         <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
-          Background Color
+          {t('imageGenerator.backgroundColor')}
         </h3>
       </div>
       <div className="flex justify-center items-center gap-4">
@@ -132,8 +70,44 @@ const generateFilename = (prompt: string, aspectRatio: string): string => {
 };
 
 export const ImageGenerator: React.FC = () => {
+    const { t } = useTranslation();
     const { isPremium, credits, deductCredits, goPremium, saveEdit, logGeneration } = useUser();
     const { theme } = useTheme();
+
+    const FILTERS: Filter[] = [
+      { name: t('imageGenerator.filters.none'), css: 'none' },
+      { name: t('imageGenerator.filters.grayscale'), css: 'grayscale(100%)' },
+      { name: t('imageGenerator.filters.sepia'), css: 'sepia(100%)' },
+      { name: t('imageGenerator.filters.invert'), css: 'invert(100%)' },
+      { name: t('imageGenerator.filters.vintage'), css: 'sepia(60%) contrast(110%) brightness(90%)' },
+      { name: t('imageGenerator.filters.noir'), css: 'grayscale(100%) contrast(130%) brightness(90%)' },
+    ];
+
+    const ASPECT_RATIOS: AspectRatio[] = [
+        { name: t('imageGenerator.ratios.square'), value: '1:1' },
+        { name: t('imageGenerator.ratios.landscape'), value: '16:9' },
+        { name: t('imageGenerator.ratios.portrait'), value: '9:16' },
+    ];
+
+    const QUALITIES: PortraitQuality[] = [
+        { name: t('imageGenerator.qualities.hd'), value: 'hd' },
+        { name: t('imageGenerator.qualities.fhd'), value: 'fhd' },
+    ];
+
+    const PROMPT_SUGGESTIONS = {
+        [t('imageGenerator.promptSuggestions.artisticStyles')]: [
+            "in the style of an oil painting", "make it cartoonish", "in the style of a detailed anime drawing", "as a watercolor painting", "in a pixel art style", "as a black and white sketch", "in a pop-art style like Andy Warhol", "in a vintage comic book style",
+        ],
+        [t('imageGenerator.promptSuggestions.lightingMood')]: [
+            "with dramatic, cinematic lighting", "make it look moody", "add a cheerful atmosphere", "with soft, golden hour lighting", "with mysterious, foggy lighting", "with neon, cyberpunk lighting", "make it bright and sunny", "with a spooky, eerie glow",
+        ],
+        [t('imageGenerator.promptSuggestions.sceneBackground')]: [
+            "Extend the image", "change the background to a cyberpunk city", "place the subject on Mars", "make it nighttime", "add rain", "change the background to a lush jungle", "put them in an underwater scene", "change the background to a futuristic space station",
+        ],
+        [t('imageGenerator.promptSuggestions.characterClothing')]: [
+            "Change the clothes", "Add tattoos", "add a superhero cape", "change the clothes to a futuristic sci-fi suit", "give the person majestic wings", "change the clothes to elegant royal attire", "add a fantasy-style helmet", "make the person look like a cyborg",
+        ],
+    };
 
     const [initialUpload, setInitialUpload] = useState<ImageFile | null>(null);
     const [originalImage, setOriginalImage] = useState<ImageFile | null>(null);
@@ -142,7 +116,7 @@ export const ImageGenerator: React.FC = () => {
     const [prompt, setPrompt] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [activeFilter, setActiveFilter] = useState<string>('None');
+    const [activeFilter, setActiveFilter] = useState<string>(t('imageGenerator.filters.none'));
     const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('1:1');
     const [portraitQuality, setPortraitQuality] = useState<'hd' | 'fhd'>('fhd');
     const [backgroundColor, setBackgroundColor] = useState<string>(theme === 'light' ? '#e2e8f0' : '#1f2937');
@@ -152,6 +126,10 @@ export const ImageGenerator: React.FC = () => {
     useEffect(() => {
         setBackgroundColor(theme === 'light' ? '#e2e8f0' : '#1f2937');
     }, [theme]);
+    
+    useEffect(() => {
+        setActiveFilter(t('imageGenerator.filters.none'));
+    }, [t]);
 
     const resetStateForNewImage = () => {
         setInitialUpload(null);
@@ -159,7 +137,7 @@ export const ImageGenerator: React.FC = () => {
         setGeneratedVariations({});
         setRedoState(null);
         setError(null);
-        setActiveFilter('None');
+        setActiveFilter(t('imageGenerator.filters.none'));
         setSelectedAspectRatio('1:1');
         setPortraitQuality('fhd');
         setBackgroundColor(theme === 'light' ? '#e2e8f0' : '#1f2937');
@@ -357,7 +335,7 @@ export const ImageGenerator: React.FC = () => {
                 edited: imageUrl,
                 prompt: prompt || "Variation",
             });
-            alert("Image saved to your Favorites!");
+            alert(t('imageGenerator.alertFavorite'));
         }
     };
     
@@ -430,11 +408,11 @@ export const ImageGenerator: React.FC = () => {
 
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              <ImageDisplay label="Original" imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} constrainHeight size={imageSize} onSizeChange={setImageSize} />
+              <ImageDisplay label={t('imageGenerator.original')} imageUrl={originalImage.previewUrl} filterCss={activeFilterCss} onReset={handleResetToInitial} isResettable={!!initialUpload && originalImage.previewUrl !== initialUpload.previewUrl} constrainHeight size={imageSize} onSizeChange={setImageSize} />
               
               <div className="w-full">
                 <div className="flex justify-center items-center mb-4 relative">
-                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">Generated Variations</h2>
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)]">{t('imageGenerator.generatedVariations')}</h2>
                 </div>
                 <div className="relative">
                   {isLoading && (
@@ -447,7 +425,7 @@ export const ImageGenerator: React.FC = () => {
                      <div className="aspect-square w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)]">
                       <div className="text-[var(--text-secondary)] flex flex-col items-center">
                         <ImageIcon className="w-16 h-16" />
-                        <p className="mt-2">Variations will appear here</p>
+                        <p className="mt-2">{t('imageGenerator.variationsAppearHere')}</p>
                       </div>
                     </div>
                   ) : (

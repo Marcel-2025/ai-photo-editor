@@ -1,5 +1,5 @@
 {
-  "name": "AI - Photo Editor",
-  "description": "An intuitive web application that allows users to upload a photo and use AI to edit it based on a text prompt. The app displays a side-by-side comparison of the original and edited images.",
+  "name": "Lumina AI",
+  "description": "Lumina AI is an intuitive web application that allows users to upload a photo and use AI to edit it based on a text prompt. The app displays a side-by-side comparison of the original and edited images.",
   "requestFramePermissions": []
 }

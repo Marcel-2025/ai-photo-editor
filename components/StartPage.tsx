@@ -1,73 +1,113 @@
-import React, { useState } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
-import { SparklesIcon, PaintBrushIcon } from './IconComponents';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Login } from './Login';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeControls } from './ThemeControls';
+import { BackgroundControls } from './BackgroundControls';
+import { ImageIcon, VideoIcon } from './IconComponents';
+import { PrivacyPolicyPage } from './PrivacyPolicyPage';
+import { DataDeletionPage } from './DataDeletionPage';
+import { useTheme } from '../contexts/ThemeContext';
 
 export const StartPage: React.FC = () => {
-    const { theme } = useTheme();
-    const [showLogin, setShowLogin] = useState(false);
+  const { t } = useTranslation();
+  const [page, setPage] = useState<'main' | 'privacy' | 'dataDeletion'>('main');
+  const { appIcons, appIcon } = useTheme();
+  const [currentIconIndex, setCurrentIconIndex] = useState(0);
 
-    const openLogin = () => {
-        setShowLogin(true);
-    };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIconIndex((prevIndex) => (prevIndex + 1) % appIcons.length);
+    }, 3000); // Change icon every 3 seconds
+    return () => clearInterval(interval);
+  }, [appIcons.length]);
 
-    const showcaseImages = [
-        "https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&w=600",
-        "https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?auto=compress&cs=tinysrgb&w=600",
-        "https://images.pexels.com/photos/1528640/pexels-photo-1528640.jpeg?auto=compress&cs=tinysrgb&w=600",
-        "https://images.pexels.com/photos/235615/pexels-photo-235615.jpeg?auto=compress&cs=tinysrgb&w=600",
-        "https://images.pexels.com/photos/414102/pexels-photo-414102.jpeg?auto=compress&cs=tinysrgb&w=600",
-        "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=600",
-    ];
+  if (page === 'privacy') {
+    return <PrivacyPolicyPage onBack={() => setPage('main')} />;
+  }
+  if (page === 'dataDeletion') {
+    return <DataDeletionPage onBack={() => setPage('main')} />;
+  }
 
-    return (
-        <div className={`min-h-screen font-sans`}>
-             <header className="absolute top-0 left-0 right-0 z-10 bg-transparent">
-                <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <div className="flex items-center space-x-3 group">
-                        <SparklesIcon className="w-8 h-8 text-[var(--accent-primary)]" />
-                        <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">AI Photo Editor</h1>
-                    </div>
-                    <button
-                        onClick={openLogin}
-                        className="bg-[var(--accent-primary)] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[var(--accent-primary-hover)] transition-colors"
-                    >
-                        Get Started
+  return (
+    <>
+      <header className="absolute top-0 left-0 right-0 p-4 z-10">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 icon-shadow" dangerouslySetInnerHTML={{ __html: appIcon.svg }} />
+            <span className="text-xl font-bold text-[var(--text-primary)]">Lumina AI</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-4">
+              <LanguageSwitcher />
+              <ThemeControls />
+              <BackgroundControls />
+          </div>
+        </div>
+      </header>
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 px-4 pt-20 pb-10 flex-grow">
+          <div className="text-center lg:text-left max-w-lg">
+             <div className="relative w-40 h-40 mx-auto lg:mx-0 mb-6">
+                {appIcons.map((icon, index) => (
+                    <div
+                    key={icon.name}
+                    className={`absolute inset-0 transition-opacity duration-1000 icon-shadow ${index === currentIconIndex ? 'opacity-100' : 'opacity-0'}`}
+                    dangerouslySetInnerHTML={{ __html: icon.svg }}
+                    />
+                ))}
+            </div>
+            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent animated-gradient">
+                Lumina AI
+            </h1>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-primary)]">
+              {t('startPage.mainHeading1')}
+              <span className="block">{t('startPage.mainHeading2')}</span>
+            </h2>
+            <p className="mt-4 text-lg text-[var(--text-secondary)]">
+              {t('startPage.subheading')}
+            </p>
+            <div className="mt-8 space-y-4 hidden lg:block">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] rounded-lg flex items-center justify-center">
+                      <ImageIcon className="w-6 h-6" />
+                  </div>
+                  <div>
+                      <h3 className="font-semibold text-[var(--text-primary)]">{t('startPage.feature1Title')}</h3>
+                      <p className="text-sm text-[var(--text-secondary)]">{t('startPage.feature1Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] rounded-lg flex items-center justify-center">
+                      <VideoIcon className="w-6 h-6" />
+                  </div>
+                  <div>
+                      <h3 className="font-semibold text-[var(--text-primary)]">{t('startPage.feature2Title')}</h3>
+                      <p className="text-sm text-[var(--text-secondary)]">
+                        {t('startPage.feature2Desc1')}
+                        <span className="block">{t('startPage.feature2Desc2')}</span>
+                      </p>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div className="w-full max-w-md">
+              <Login />
+          </div>
+        </div>
+        <footer className="w-full text-center p-4">
+            <div className="space-y-2">
+                <div className="space-x-4">
+                    <button onClick={() => setPage('privacy')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline">
+                    {t('footer.privacy')}
+                    </button>
+                    <button onClick={() => setPage('dataDeletion')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:underline">
+                    {t('footer.dataDeletion')}
                     </button>
                 </div>
-            </header>
-
-            <main className="relative z-0">
-                <section className="min-h-[90vh] flex flex-col items-center justify-center text-center px-4">
-                     <div className="relative z-10">
-                        <PaintBrushIcon className="w-20 h-20 mx-auto mb-6 text-white" />
-                        <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 bg-clip-text text-transparent animated-gradient">Unleash Your Creativity with AI</h2>
-                        <p className="text-lg sm:text-xl text-[var(--text-secondary)] max-w-3xl mx-auto mb-12">Transform your photos into stunning works of art. From simple touch-ups to fantastical transformations, our AI-powered editor makes it easy.</p>
-                        <button
-                            onClick={openLogin}
-                            className="bg-[var(--accent-primary)] text-white font-bold py-3 px-8 text-base sm:text-lg rounded-full hover:bg-[var(--accent-primary-hover)] transition-transform hover:scale-105"
-                        >
-                            Start Editing for Free
-                        </button>
-                    </div>
-                </section>
-                
-                <section className="container mx-auto px-4 py-8 sm:py-16">
-                     <h3 className="text-3xl sm:text-4xl font-bold text-center mb-10 text-[var(--text-primary)]">See The Magic</h3>
-                     <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-                        {showcaseImages.map((src, index) => (
-                             <img key={index} className="rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1" src={src} alt={`Showcase image ${index + 1}`} loading="lazy" />
-                        ))}
-                    </div>
-                </section>
-            </main>
-
-            {showLogin && (
-                <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 animate-fade-in">
-                   <style>{`.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
-                    <Login onClose={() => setShowLogin(false)} />
-                </div>
-            )}
-        </div>
-    );
+                <p className="text-xs text-[var(--text-secondary)]/80">{t('footer.copyright')}</p>
+            </div>
+        </footer>
+      </div>
+    </>
+  );
 };

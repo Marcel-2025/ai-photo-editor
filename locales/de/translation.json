@@ -1,0 +1,243 @@
+{
+  "header": {
+    "image": "Bild",
+    "video": "Video",
+    "goPremium": "Premium werden",
+    "credits": "Credits",
+    "premium": "Premium",
+    "myDashboard": "Mein Dashboard",
+    "logout": "Abmelden",
+    "settings": "Einstellungen",
+    "history": "Verlauf",
+    "dashboard": "Dashboard",
+    "feed": "Feed"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "imageGenerator": "Bild-Generator",
+    "videoGenerator": "Video-Generator",
+    "history": "Verlauf",
+    "settings": "Einstellungen",
+    "feed": "Feed"
+  },
+  "startPage": {
+    "mainHeading1": "Erstellen Sie atemberaubende Visuals",
+    "mainHeading2": "mit KI",
+    "subheading": "Verwandeln Sie Ihre Fotos in Kunst und erwecken Sie Ihre Ideen mit unseren leistungsstarken KI-Bild- und Videogenerierungswerkzeugen zum Leben.",
+    "feature1Title": "Erweiterte Bildbearbeitung",
+    "feature1Desc": "Gehen Sie über einfache Filter hinaus. Verwenden Sie Text-Prompts, um Objekte hinzuzufügen, Hintergründe zu ändern oder Ihre Fotos völlig neu zu gestalten.",
+    "feature2Title": "Text-zu-Video-Generierung",
+    "feature2Desc1": "Verwandeln Sie Ihre statischen Bilder in dynamische Videos.",
+    "feature2Desc2": "Beschreiben Sie die Aktion und sehen Sie zu, wie Ihre Fotos animiert werden."
+  },
+  "login": {
+    "title1": "Melde dich an, um loszulegen.",
+    "title2": "Neue Benutzer erhalten 300 kostenlose Credits!",
+    "google": "Mit Google fortfahren",
+    "facebook": "Mit Facebook fortfahren",
+    "or": "ODER",
+    "usernamePlaceholder": "Gib deinen Benutzernamen ein",
+    "signIn": "Anmelden oder Konto erstellen",
+    "demoInfo1": "Dies ist eine Demo-Anwendung. Es ist kein Passwort erforderlich.",
+    "demoInfo2": "Kontodaten werden im lokalen Speicher deines Browsers gespeichert."
+  },
+  "imageGenerator": {
+    "original": "Original",
+    "generatedVariations": "Generierte Variationen",
+    "applyFilter": "Filter anwenden",
+    "aspectRatio": "Seitenverhältnis",
+    "portraitQuality": "Porträtqualität",
+    "backgroundColor": "Hintergrundfarbe",
+    "variationsAppearHere": "Variationen werden hier angezeigt",
+    "promptPlaceholder": "z.B. 'Füge der Person einen Superheldenumhang hinzu'",
+    "generate": "Generieren (20 Cr)",
+    "generating": "Wird generiert...",
+    "undo": "Variante rückgängig machen",
+    "redo": "Variante wiederholen",
+    "startOver": "Mit neuem Bild beginnen",
+    "promptIdeas": "Prompt-Ideen",
+    "reset": "Zurücksetzen",
+    "imageWillAppear": "{{label}}-Bild wird hier angezeigt",
+    "filters": {
+      "none": "Kein",
+      "grayscale": "Graustufen",
+      "sepia": "Sepia",
+      "invert": "Invertieren",
+      "vintage": "Vintage",
+      "noir": "Noir"
+    },
+    "ratios": {
+      "square": "Quadrat",
+      "landscape": "Querformat",
+      "portrait": "Hochformat"
+    },
+    "qualities": {
+      "hd": "HD (720p)",
+      "fhd": "FHD (1080p)"
+    },
+    "promptSuggestions": {
+      "artisticStyles": "Künstlerische Stile",
+      "lightingMood": "Licht & Stimmung",
+      "sceneBackground": "Szene & Hintergrund",
+      "characterClothing": "Charakter & Kleidung"
+    },
+    "variations": {
+      "notGenerated": "Nicht generiert",
+      "useAsBase": "Als Basis verwenden",
+      "saveToFavorites": "Zu Favoriten speichern",
+      "downloadCropped": "{{name}} herunterladen (zugeschnitten)",
+      "downloadFullSquare": "Ganzes Quadrat herunterladen"
+    },
+    "alertFavorite": "Bild in deinen Favoriten gespeichert!"
+  },
+  "videoGenerator": {
+    "aspectRatio": "Seitenverhältnis",
+    "resolution": "Auflösung",
+    "sourceImage": "Ausgangsbild",
+    "generatedVideo": "Generiertes Video",
+    "videoAppearHere": "Dein generiertes Video wird hier angezeigt",
+    "promptPlaceholder": "z.B. 'Eine filmische Aufnahme dieses Autos in einer Neon-Stadt'",
+    "generate": "Generieren (100 Cr)",
+    "generating": "Wird generiert...",
+    "startOver": "Mit neuem Bild beginnen",
+    "promptIdeas": "Prompt-Ideen",
+    "analyzing": "Analysiere dein Bild für Ideen...",
+    "ratios": {
+      "landscape": "Querformat",
+      "portrait": "Hochformat"
+    },
+    "resolutions": {
+      "p720": "720p",
+      "p1080": "1080p"
+    },
+    "loadingMessages": {
+      "m1": "Der KI-Regisseur wärmt sich auf...",
+      "m2": "Die ersten paar Bilder werden gerendert...",
+      "m3": "Dies kann einige Minuten dauern, gut Ding will Weile haben!",
+      "m4": "Die Szene wird zusammengestellt...",
+      "m5": "Filmische Magie wird angewendet...",
+      "m6": "Das Video-Rendering wird abgeschlossen...",
+      "m7": "Fast geschafft! Dein Video wird abgerufen..."
+    },
+    "downloadVideo": "Video herunterladen"
+  },
+  "dashboard": {
+    "favoritesSaved": "Gespeicherte Favoriten",
+    "totalGenerations": "Generierungen gesamt",
+    "creditsRemaining": "Verbleibende Credits",
+    "premiumMember": "Premium-Mitglied",
+    "freeMember": "Kostenloses Mitglied",
+    "publicGallery": "Öffentliche Galerie",
+    "publicGalleryDesc": "Wenn aktiviert, sind deine gespeicherten Favoriten für andere im öffentlichen Feed sichtbar.",
+    "changePicture": "Profilbild ändern",
+    "editName": "Name bearbeiten",
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "appearance": "Erscheinungsbild",
+    "theme": "Thema",
+    "backgroundStyle": "Hintergrundstil",
+    "neonPrompts": "Neon-Prompts",
+    "language": "Sprache",
+    "selectLanguage": "Sprache auswählen",
+    "legal": "Rechtliches",
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "dataDeletion": "Datenlöschung",
+    "appIcon": "App-Symbol"
+  },
+  "history": {
+    "title": "Mein Generierungsverlauf",
+    "noHistoryTitle": "Kein Verlauf gefunden",
+    "noHistoryDesc": "Deine gespeicherten Generierungen werden hier angezeigt, sobald du sie erstellst.",
+    "prompt": "Prompt:",
+    "close": "Schließen"
+  },
+  "imageUploader": {
+    "drop": "Bild zum Hochladen ablegen",
+    "click": "Klicken oder Foto per Drag & Drop ziehen",
+    "formats": "PNG, JPG oder WEBP",
+    "alert": "Bitte eine Bilddatei ablegen (PNG, JPG oder WEBP)."
+  },
+  "loader": {
+    "creatingMagic": "KI erschafft Magie..."
+  },
+  "premiumModal": {
+    "title": "Premium werden!",
+    "subtitle": "Schalte unbegrenzte Fotobearbeitungen frei und entfessle deine Kreativität ohne Grenzen.",
+    "feature1": "Unbegrenzte KI-Bearbeitungen",
+    "feature2": "Bevorzugter Zugang zu neuen Funktionen",
+    "feature3": "Unterstütze Indie-Entwicklung",
+    "purchase": "Kauf mit PayPal simulieren",
+    "disclaimer": "Dies ist eine Simulation. Es wird keine echte Zahlung verarbeitet.",
+    "alert": "Herzlichen Glückwunsch! Du bist jetzt ein Premium-Benutzer mit unbegrenzten Bearbeitungen. (Dies ist eine Simulation)"
+  },
+  "gallery": {
+    "title": "Meine Favoriten",
+    "empty": "Deine Lieblingsbearbeitungen werden hier angezeigt.",
+    "prompt": "Prompt:"
+  },
+    "feed": {
+    "title": "Öffentlicher Feed",
+    "empty": "Der Feed ist derzeit leer. Sei der Erste, der etwas teilt!",
+    "loginToInteract": "Bitte melde dich an, um mit Beiträgen zu interagieren.",
+    "addCommentPrompt": "Einen Kommentar hinzufügen...",
+    "commentAdded": "Kommentar hinzugefügt (Simulation)."
+  },
+  "profile": {
+    "notFound": "Benutzerprofil nicht gefunden.",
+    "creations": "{{count}} öffentliche Kreationen",
+    "noPublicPosts": "Dieser Benutzer hat noch keine öffentlichen Beiträge geteilt."
+  },
+  "common": {
+    "lightMode": "Heller Modus",
+    "darkMode": "Dunkler Modus",
+    "cyberpunkMode": "Cyberpunk-Modus",
+    "changeBackground": "Hintergrund ändern",
+    "default": "Standard",
+    "aurora": "Aurora",
+    "particles": "Partikel",
+    "back": "Zurück",
+    "backToFeed": "Zurück zum Feed"
+  },
+  "footer": {
+    "privacy": "Datenschutzrichtlinie",
+    "dataDeletion": "Datenlöschung",
+    "copyright": "© 2025 Ehhm.s. Alle Rechte vorbehalten."
+  },
+  "privacyPage": {
+    "title": "Datenschutzrichtlinie",
+    "lastUpdated": "Zuletzt aktualisiert: [Aktuelles Datum]",
+    "content": [
+      {
+        "heading": "Einführung",
+        "text": "Willkommen bei Lumina AI. Diese Datenschutzrichtlinie erklärt, wie wir Informationen über Sie sammeln, verwenden und weitergeben, wenn Sie unsere Webanwendung nutzen. Da es sich um eine Demo-Anwendung handelt, sind unsere Datenpraktiken minimal und auf die Bereitstellung der Kernfunktionalität ausgerichtet."
+      },
+      {
+        "heading": "Informationen, die wir sammeln",
+        "text": "Die einzigen persönlichen Informationen, die wir sammeln und speichern, sind ein von Ihnen gewählter Benutzername und ein optionales Profilbild. Alle diese Daten sowie Ihr Generierungsverlauf und Ihre gespeicherten Favoriten werden ausschließlich im lokalen Speicher Ihres Browsers gespeichert. Das bedeutet, die Daten verbleiben auf Ihrem eigenen Gerät und werden nicht an unsere Server übertragen oder dort gespeichert."
+      },
+      {
+        "heading": "Wie wir Ihre Informationen verwenden",
+        "text": "Die in Ihrem lokalen Speicher gespeicherten Informationen werden ausschließlich zur Personalisierung Ihrer Erfahrung innerhalb der App verwendet. Der Benutzername und das Profilbild werden in der Benutzeroberfläche angezeigt, und Ihr Verlauf sowie Ihre Favoriten werden zu Ihrer Bequemlichkeit gespeichert, sodass Sie in zukünftigen Sitzungen im selben Browser darauf zugreifen können."
+      },
+      {
+        "heading": "Datenweitergabe und Offenlegung",
+        "text": "Wir haben keinen Zugriff auf die in Ihrem Browser gespeicherten Daten und geben diese auch nicht an Dritte weiter. Da die Daten Ihr Gerät nie verlassen, können sie von uns nicht offengelegt werden."
+      },
+      {
+        "heading": "Datensicherheit",
+        "text": "Die Sicherheit Ihrer Daten hängt von der Sicherheit des von Ihnen verwendeten Geräts und Browsers ab. Wir ergreifen keine zusätzlichen Sicherheitsmaßnahmen, da wir Ihre Daten nicht auf unseren Servern verarbeiten oder speichern."
+      }
+    ]
+  },
+  "dataDeletionPage": {
+    "title": "Richtlinie zur Datenlöschung",
+    "p1": "Lumina AI ist eine Demo-Anwendung, die alle Benutzerdaten, einschließlich Ihres Benutzernamens, Profilbilds, Generierungsverlaufs und gespeicherter Favoriten, direkt im lokalen Speicher Ihres Webbrowsers ablegt.",
+    "p2": "Das bedeutet, dass keine persönlichen Daten jemals an unsere Server gesendet oder dort gespeichert werden. Die Daten verbleiben auf Ihrem eigenen Gerät.",
+    "p3": "Um alle Ihre Daten zu löschen, können Sie einfach den Cache und die Website-Daten Ihres Browsers für diese Website leeren. Dadurch werden alle mit Ihrer Nutzung der App verbundenen Informationen dauerhaft entfernt. Wenn Sie Hilfe benötigen, kontaktieren Sie uns bitte unter",
+    "email": "privacy@lumina-ai.demo",
+    "p4": "Das Leeren Ihrer Website-Daten ist eine unumkehrbare Aktion und setzt Ihr Konto, Ihre Credits und alle gespeicherten Arbeiten zurück."
+  }
+}

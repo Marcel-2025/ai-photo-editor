@@ -1,5 +1,5 @@
-
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { UploadIcon } from './IconComponents';
 
 interface ImageUploaderProps {
@@ -7,6 +7,7 @@ interface ImageUploaderProps {
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
+  const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -49,7 +50,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) =
       if (file.type.startsWith('image/')) {
         onImageUpload(file);
       } else {
-        alert('Please drop an image file (PNG, JPG, or WEBP).');
+        alert(t('imageUploader.alert'));
       }
     }
   };
@@ -77,9 +78,9 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) =
       <div className="flex flex-col items-center pointer-events-none">
         <UploadIcon className="w-16 h-16 text-[var(--text-secondary)] mb-4" />
         <h3 className="text-xl font-semibold text-[var(--text-primary)]">
-          {isDragging ? 'Drop image to upload' : 'Click or drag & drop a photo'}
+          {isDragging ? t('imageUploader.drop') : t('imageUploader.click')}
         </h3>
-        <p className="text-[var(--text-secondary)] mt-1">PNG, JPG, or WEBP</p>
+        <p className="text-[var(--text-secondary)] mt-1">{t('imageUploader.formats')}</p>
       </div>
     </div>
   );

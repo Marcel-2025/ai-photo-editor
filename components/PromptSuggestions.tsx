@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LightbulbIcon } from './IconComponents';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -21,6 +22,7 @@ const neonColors = [
 
 
 export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestions, onSelect, disabled }) => {
+  const { t } = useTranslation();
   const { promptStyle } = useTheme();
   const [activeCategory, setActiveCategory] = useState<string>('');
 
@@ -39,7 +41,7 @@ export const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ suggestion
     <div className={`mt-8 transition-opacity ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
       <div className="flex items-center justify-center gap-2 mb-6">
         <LightbulbIcon className="w-5 h-5 text-yellow-400" />
-        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Prompt Ideas</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)]">{t('imageGenerator.promptIdeas')}</h3>
       </div>
       
       {/* Tabs for Mobile/Tablet */}

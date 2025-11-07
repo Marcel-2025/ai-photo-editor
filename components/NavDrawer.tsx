@@ -1,8 +1,8 @@
 import React from 'react';
-import { SparklesIcon, ImageIcon, VideoIcon, HistoryIcon, UserIcon, CloseIcon, SettingsIcon } from './IconComponents';
+import { useTranslation } from 'react-i18next';
+import { ImageIcon, VideoIcon, HistoryIcon, SettingsIcon, CloseIcon, SparklesIcon, HomeIcon } from './IconComponents';
+import { View } from '../App';
 import { useTheme } from '../contexts/ThemeContext';
-
-type View = 'imageGenerator' | 'videoGenerator' | 'history' | 'dashboard' | 'settings';
 
 interface NavDrawerProps {
   isOpen: boolean;
@@ -10,58 +10,51 @@ interface NavDrawerProps {
   onNavigate: (view: View) => void;
 }
 
-const navItems: { view: View, label: string, icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
-    { view: 'dashboard', label: 'Dashboard', icon: UserIcon },
-    { view: 'imageGenerator', label: 'Image Generator', icon: ImageIcon },
-    { view: 'videoGenerator', label: 'Video Generator', icon: VideoIcon },
-    { view: 'history', label: 'History', icon: HistoryIcon },
-    { view: 'settings', label: 'Settings', icon: SettingsIcon },
-];
-
 export const NavDrawer: React.FC<NavDrawerProps> = ({ isOpen, onClose, onNavigate }) => {
-  const { theme, background } = useTheme();
+  const { t } = useTranslation();
+  const { appIcon } = useTheme();
 
-  const getBackgroundClass = () => {
-      if (theme === 'cyberpunk') return 'cyberpunk-bg-grid';
-      if (background === 'aurora') return 'bg-aurora';
-      if (background === 'particles') return 'bg-particles';
-      return '';
-  }
+  const navItems: { view: View; label: string; icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
+    { view: 'feed', label: t('header.feed'), icon: SparklesIcon },
+    { view: 'imageGenerator', label: t('header.image'), icon: ImageIcon },
+    { view: 'videoGenerator', label: t('header.video'), icon: VideoIcon },
+    { view: 'history', label: t('header.history'), icon: HistoryIcon },
+    { view: 'dashboard', label: t('header.dashboard'), icon: HomeIcon },
+    { view: 'settings', label: t('header.settings'), icon: SettingsIcon },
+  ];
 
   return (
     <>
-      {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 z-30 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
         onClick={onClose}
-        aria-hidden="true"
       />
-      {/* Drawer */}
       <div
-        className={`fixed top-0 left-0 bottom-0 w-72 bg-[var(--background-secondary)] shadow-2xl z-40 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'} ${getBackgroundClass()} overflow-hidden`}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="nav-drawer-title"
+        className={`fixed top-0 left-0 h-full w-64 bg-[var(--background-primary)] shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
-        <div className="p-4 flex justify-between items-center border-b border-[var(--border-primary)] relative z-10 bg-[var(--background-secondary)]/80 backdrop-blur-sm">
-            <div id="nav-drawer-title" className="flex items-center space-x-2 group">
-                <SparklesIcon className="w-7 h-7 text-[var(--accent-primary)]" />
-                <h1 className="text-xl font-bold text-[var(--text-primary)]">AI Editor</h1>
-            </div>
-          <button onClick={onClose} className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" aria-label="Close navigation menu">
-            <CloseIcon className="w-6 h-6" />
+        <div className="flex items-center justify-between p-4 border-b border-[var(--border-primary)]">
+          <div className="flex items-center gap-2">
+              <div className="w-8 h-8 icon-shadow" dangerouslySetInnerHTML={{ __html: appIcon.svg }} />
+              <span className="text-xl font-bold text-[var(--text-primary)]">Lumina AI</span>
+          </div>
+          <button onClick={onClose} className="p-1 rounded-full hover:bg-[var(--background-secondary)]">
+            <CloseIcon className="w-6 h-6 text-[var(--text-secondary)]" />
           </button>
         </div>
-        <nav className="p-4 relative z-10">
+        <nav className="p-4">
           <ul>
-            {navItems.map(item => (
+            {navItems.map((item) => (
               <li key={item.view}>
                 <button
                   onClick={() => onNavigate(item.view)}
-                  className="w-full flex items-center gap-4 px-3 py-3 rounded-lg text-lg font-medium text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-3 text-left text-[var(--text-primary)] hover:bg-[var(--background-secondary)] rounded-md transition-colors"
                 >
                   <item.icon className="w-6 h-6 text-[var(--accent-primary)]" />
-                  <span>{item.label}</span>
+                  <span className="font-medium">{item.label}</span>
                 </button>
               </li>
             ))}

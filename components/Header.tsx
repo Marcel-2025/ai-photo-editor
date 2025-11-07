@@ -1,101 +1,139 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUser } from '../contexts/UserContext';
-import { SparklesIcon, UserIcon, CreditIcon, LogoutIcon, ImageIcon, VideoIcon, MenuIcon } from './IconComponents';
-import { PremiumModal } from './PremiumModal';
 import { ThemeControls } from './ThemeControls';
-import { BackgroundControls } from './BackgroundControls';
-
-type View = 'imageGenerator' | 'videoGenerator' | 'history' | 'dashboard' | 'settings';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { UserIcon, LogoutIcon, SettingsIcon, MenuIcon, ImageIcon, VideoIcon, HistoryIcon, HomeIcon, SparklesIcon } from './IconComponents';
+import { View } from '../App';
+import { useTheme } from '../contexts/ThemeContext';
+import { PromptStyleSwitcher } from './PromptStyleSwitcher';
 
 interface HeaderProps {
-    onNavigate: (view: View) => void;
-    currentView: View;
-    onMenuClick: () => void;
+  onNavigate: (view: View) => void;
+  currentView: View;
+  onMenuClick: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ onNavigate, currentView, onMenuClick }) => {
-  const { user, credits, isPremium, logout, goPremium } = useUser();
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const { t } = useTranslation();
+  const { user, credits, isPremium, logout } = useUser();
+  const { appIcon } = useTheme();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  const navItems: { view: View; label: string; icon: React.FC<React.SVGProps<SVGSVGElement>> }[] = [
+      { view: 'feed', label: t('header.feed'), icon: SparklesIcon },
+      { view: 'imageGenerator', label: t('header.image'), icon: ImageIcon },
+      { view: 'videoGenerator', label: t('header.video'), icon: VideoIcon },
+      { view: 'history', label: t('header.history'), icon: HistoryIcon },
+  ];
+
+  if (!user) return null;
 
   return (
-    <>
-      <header className="bg-[var(--background-secondary)]/80 backdrop-blur-sm border-b border-[var(--border-primary)]/50 sticky top-0 z-20">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
+    <header className="sticky top-0 bg-[var(--background-primary)]/80 backdrop-blur-md border-b border-[var(--border-primary)] z-30">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={onMenuClick}
-              className="p-2 -ml-2 text-[var(--text-primary)] md:hidden"
+              className="md:hidden text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors p-2 -ml-2"
               aria-label="Open navigation menu"
             >
-                <MenuIcon className="w-6 h-6" />
+              <MenuIcon className="w-6 h-6" />
             </button>
-            <button onClick={() => onNavigate('imageGenerator')} className="flex items-center space-x-2 sm:space-x-3 group">
-              <SparklesIcon className="w-8 h-8 text-[var(--accent-primary)] group-hover:animate-pulse" />
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text-primary)]">
-                AI Photo Editor
-              </h1>
-            </button>
-            <div className="hidden md:flex items-center gap-2 border-l border-[var(--border-primary)] ml-3 pl-4">
-              <button 
-                  onClick={() => onNavigate('imageGenerator')}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${currentView === 'imageGenerator' ? 'bg-[var(--accent-primary)] text-white' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)]'}`}
-              >
-                  <ImageIcon className="w-5 h-5" />
-                  Image
-              </button>
-              <button 
-                  onClick={() => onNavigate('videoGenerator')}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${currentView === 'videoGenerator' ? 'bg-[var(--accent-primary)] text-white' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)]'}`}
-              >
-                  <VideoIcon className="w-5 h-5" />
-                  Video
-              </button>
+             <div className="flex items-center gap-2 cursor-pointer" onClick={() => onNavigate('feed')}>
+              <div className="w-8 h-8 icon-shadow" dangerouslySetInnerHTML={{ __html: appIcon.svg }} />
+              <span className="text-xl font-bold text-[var(--text-primary)] hidden sm:block">Lumina AI</span>
             </div>
           </div>
-          
-          <div className="flex items-center space-x-2 sm:space-x-4">
-             {user && (
-                <>
-                  <div className="hidden md:flex items-center gap-2 md:gap-4">
-                    <BackgroundControls />
-                    <ThemeControls />
-                  </div>
 
-                  {!isPremium && (
-                    <>
-                      <div className="hidden md:flex items-center space-x-2 bg-[var(--background-secondary)] px-3 py-1.5 rounded-full border border-[var(--border-primary)]">
-                        <CreditIcon className="w-5 h-5 text-yellow-400" />
-                        <span className="font-semibold text-[var(--text-primary)]">{credits}</span>
-                        <span className="text-[var(--text-secondary)] text-sm hidden sm:inline">Credits</span>
-                      </div>
-                      <button 
-                        onClick={() => setShowPremiumModal(true)}
-                        className="bg-yellow-500 text-gray-900 font-bold px-4 py-1.5 rounded-full text-sm hover:bg-yellow-600 transition-colors"
-                      >
-                        Go Premium
-                      </button>
-                    </>
-                  )}
-                  {isPremium && (
-                    <div className="flex items-center space-x-2 bg-yellow-500/20 text-yellow-400 px-3 py-1.5 rounded-full border border-yellow-500/50">
-                        <SparklesIcon className="w-5 h-5" />
-                        <span className="font-semibold">Premium</span>
+          <nav className="hidden md:flex items-center gap-2">
+            {navItems.map(item => (
+                 <button 
+                    key={item.view}
+                    onClick={() => onNavigate(item.view)}
+                    className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${currentView === item.view ? 'bg-[var(--background-secondary)] text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--background-secondary)] hover:text-[var(--text-primary)]'}`}
+                >
+                    <item.icon className="w-5 h-5" />
+                    {item.label}
+                </button>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="hidden md:flex items-center gap-2">
+                <LanguageSwitcher />
+                <PromptStyleSwitcher />
+                <ThemeControls />
+                <button 
+                    onClick={() => onNavigate('settings')}
+                    title={t('header.settings')}
+                    className="p-2 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] transition-colors"
+                >
+                    <SettingsIcon className="w-5 h-5" />
+                </button>
+            </div>
+
+            <button
+                onClick={() => onNavigate('dashboard')}
+                title={t('header.dashboard')}
+                className={`hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors ${currentView === 'dashboard' ? 'bg-[var(--background-secondary)] text-[var(--accent-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--background-secondary)] hover:text-[var(--text-primary)]'}`}
+            >
+                <HomeIcon className="w-5 h-5" />
+            </button>
+
+            <div className="relative" ref={userMenuRef}>
+              <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className="flex items-center gap-2 text-left p-1 rounded-full hover:bg-[var(--background-secondary)] transition-colors">
+                 {user.profilePicture ? (
+                        <img src={user.profilePicture} alt="Profile" className="w-9 h-9 rounded-full object-cover border-2 border-[var(--border-secondary)]" />
+                    ) : (
+                        <div className="w-9 h-9 rounded-full bg-[var(--background-tertiary)] grid place-items-center border-2 border-[var(--border-secondary)]">
+                            <UserIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        </div>
+                    )}
+                <div className="hidden lg:block">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]">{user.name}</p>
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    {isPremium ? t('header.premium') : `${credits} ${t('header.credits')}`}
+                  </p>
+                </div>
+              </button>
+              {isUserMenuOpen && (
+                <div className="absolute top-full right-0 mt-2 w-56 bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-lg shadow-2xl z-40 animate-fade-in">
+                  <div className="p-2">
+                    <div className="px-2 py-2 border-b border-[var(--border-primary)]">
+                       <p className="text-sm font-semibold text-[var(--text-primary)] truncate">{user.name}</p>
+                       <p className="text-xs text-[var(--text-secondary)]">
+                         {isPremium ? t('header.premium') : `${credits} ${t('header.credits')}`}
+                       </p>
                     </div>
-                  )}
-                  
-                  <button onClick={() => onNavigate('dashboard')} title="My Dashboard" className={`flex items-center space-x-2 p-2 rounded-lg transition-colors ${currentView === 'dashboard' ? 'bg-[var(--accent-primary)] text-white' : 'text-[var(--text-primary)] hover:bg-[var(--background-tertiary)]'}`}>
-                    <UserIcon className="w-6 h-6" />
-                    <span className="font-medium hidden sm:inline">{user.name}</span>
-                  </button>
-                  <button onClick={logout} title="Logout" className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] rounded-full transition-colors">
-                    <LogoutIcon className="w-6 h-6" />
-                  </button>
-                </>
-             )}
+                     <button onClick={() => { onNavigate('settings'); setIsUserMenuOpen(false); }} className="w-full text-left flex items-center gap-3 px-2 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-primary)] rounded-md transition-colors mt-1">
+                      <SettingsIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                      {t('header.settings')}
+                    </button>
+                    <button onClick={logout} className="w-full text-left flex items-center gap-3 px-2 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--border-primary)] rounded-md transition-colors">
+                      <LogoutIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                      {t('header.logout')}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </header>
-      {showPremiumModal && <PremiumModal onClose={() => setShowPremiumModal(false)} onConfirm={() => { goPremium(); setShowPremiumModal(false); }} />}
-    </>
+      </div>
+       <style>{`.animate-fade-in { animation: fadeIn 0.15s ease-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+    </header>
   );
 };

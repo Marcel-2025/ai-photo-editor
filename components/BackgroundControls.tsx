@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
 import { PaletteIcon, ImageIcon } from './IconComponents';
 
 type Background = 'default' | 'aurora' | 'particles';
 
 export const BackgroundControls: React.FC = () => {
+  const { t } = useTranslation();
   const { background, setBackground } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const backgrounds: { value: Background, label: string }[] = [
-    { value: 'default', label: 'Default' },
-    { value: 'aurora', label: 'Aurora' },
-    { value: 'particles', label: 'Particles' },
+    { value: 'default', label: t('common.default') },
+    { value: 'aurora', label: t('common.aurora') },
+    { value: 'particles', label: t('common.particles') },
   ];
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export const BackgroundControls: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        title="Change Background"
+        title={t('common.changeBackground')}
         className="p-2 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] transition-colors"
       >
         <ImageIcon className="w-5 h-5" />
@@ -37,7 +39,7 @@ export const BackgroundControls: React.FC = () => {
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-40 bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-lg shadow-2xl z-30">
           <div className="p-2">
-            <h4 className="px-2 py-1 text-xs font-semibold text-[var(--text-secondary)] uppercase">Background</h4>
+            <h4 className="px-2 py-1 text-xs font-semibold text-[var(--text-secondary)] uppercase">{t('settings.backgroundStyle')}</h4>
             {backgrounds.map(bg => (
               <button
                 key={bg.value}

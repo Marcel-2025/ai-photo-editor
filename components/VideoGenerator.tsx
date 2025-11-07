@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ImageFile } from '../types';
 import { useUser } from '../contexts/UserContext';
 import { generateVideoWithGemini, fetchVideoFromUri, generatePromptSuggestionsForVideo } from '../services/geminiService';
@@ -12,27 +13,28 @@ import { MagicWandIcon, TrashIcon, DownloadIcon, VideoIcon, AspectRatioIcon, Scr
 type AspectRatio = '16:9' | '9:16';
 type Resolution = '720p' | '1080p';
 
-const VIDEO_ASPECT_RATIOS: { name: string, value: AspectRatio }[] = [
-    { name: 'Landscape', value: '16:9' },
-    { name: 'Portrait', value: '9:16' },
-];
-
-const VIDEO_RESOLUTIONS: { name: string, value: Resolution }[] = [
-    { name: '720p', value: '720p' },
-    { name: '1080p', value: '1080p' },
-];
-
-const LOADING_MESSAGES = [
-    "Warming up the AI director...",
-    "Rendering the first few frames...",
-    "This can take a few minutes, good things take time!",
-    "Compositing the scene...",
-    "Applying cinematic magic...",
-    "Finalizing the video render...",
-];
-
 export const VideoGenerator: React.FC = () => {
+    const { t } = useTranslation();
     const { isPremium, credits, deductCredits, goPremium } = useUser();
+
+    const VIDEO_ASPECT_RATIOS: { name: string, value: AspectRatio }[] = [
+        { name: t('videoGenerator.ratios.landscape'), value: '16:9' },
+        { name: t('videoGenerator.ratios.portrait'), value: '9:16' },
+    ];
+
+    const VIDEO_RESOLUTIONS: { name: string, value: Resolution }[] = [
+        { name: t('videoGenerator.resolutions.p720'), value: '720p' },
+        { name: t('videoGenerator.resolutions.p1080'), value: '1080p' },
+    ];
+
+    const LOADING_MESSAGES = [
+        t('videoGenerator.loadingMessages.m1'),
+        t('videoGenerator.loadingMessages.m2'),
+        t('videoGenerator.loadingMessages.m3'),
+        t('videoGenerator.loadingMessages.m4'),
+        t('videoGenerator.loadingMessages.m5'),
+        t('videoGenerator.loadingMessages.m6'),
+    ];
     
     const [sourceImage, setSourceImage] = useState<ImageFile | null>(null);
     const [prompt, setPrompt] = useState<string>('');
@@ -57,7 +59,12 @@ export const VideoGenerator: React.FC = () => {
                 setError(null);
                 try {
                     const suggestions = await generatePromptSuggestionsForVideo(sourceImage.file);
-                    setPromptSuggestions(suggestions);
+                    const translatedSuggestions = Object.keys(suggestions).reduce((acc, key) => {
+                        const translatedKey = t(`imageGenerator.promptSuggestions.${key.replace(/\s/g, '').replace('&', 'And')}`, key);
+                        acc[translatedKey] = suggestions[key];
+                        return acc;
+                    }, {} as {[key: string]: string[]});
+                    setPromptSuggestions(translatedSuggestions);
                 } catch (err) {
                     console.error("Failed to fetch prompt suggestions:", err);
                 } finally {
@@ -66,7 +73,7 @@ export const VideoGenerator: React.FC = () => {
             };
             getSuggestions();
         }
-    }, [sourceImage]);
+    }, [sourceImage, t]);
 
     useEffect(() => {
         if (isLoading) {
@@ -87,7 +94,7 @@ export const VideoGenerator: React.FC = () => {
                 clearInterval(messageIntervalRef.current);
             }
         };
-    }, [isLoading]);
+    }, [isLoading, LOADING_MESSAGES]);
 
     const handleImageUpload = (file: File) => {
         setSourceImage({ file, previewUrl: URL.createObjectURL(file) });
@@ -116,7 +123,7 @@ export const VideoGenerator: React.FC = () => {
                 throw new Error("An unknown error occurred with credits.");
             }
             const videoUri = await generateVideoWithGemini(sourceImage.file, prompt.trim(), aspectRatio, resolution);
-            setLoadingMessage("Almost there! Fetching your video...");
+            setLoadingMessage(t('videoGenerator.loadingMessages.m7'));
             const videoBlob = await fetchVideoFromUri(videoUri);
             const videoUrl = URL.createObjectURL(videoBlob);
             setGeneratedVideoUrl(videoUrl);
@@ -126,7 +133,7 @@ export const VideoGenerator: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [sourceImage, prompt, aspectRatio, resolution, isPremium, credits, deductCredits]);
+    }, [sourceImage, prompt, aspectRatio, resolution, isPremium, credits, deductCredits, t]);
     
     const reset = () => {
         setSourceImage(null);
@@ -167,7 +174,7 @@ export const VideoGenerator: React.FC = () => {
             <div className="lg:col-span-2 bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2 mb-3">
                     <AspectRatioIcon className="w-5 h-5 text-[var(--text-secondary)]" />
-                    <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Aspect Ratio</h3>
+                    <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">{t('videoGenerator.aspectRatio')}</h3>
                 </div>
                 <div className="flex flex-wrap justify-center gap-3">
                     {VIDEO_ASPECT_RATIOS.map((ratio) => (
@@ -179,7 +186,7 @@ export const VideoGenerator: React.FC = () => {
             <div className="lg:col-span-2 bg-[var(--background-tertiary)] border border-[var(--border-primary)] rounded-xl p-4 shadow-2xl h-full flex flex-col justify-center">
                 <div className="flex items-center justify-center gap-2 mb-3">
                     <ScreenResolutionIcon className="w-5 h-5 text-[var(--text-secondary)]" />
-                    <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Resolution</h3>
+                    <h3 className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">{t('videoGenerator.resolution')}</h3>
                 </div>
                 <div className="flex flex-wrap justify-center gap-3">
                     {VIDEO_RESOLUTIONS.map((res) => (
@@ -191,10 +198,10 @@ export const VideoGenerator: React.FC = () => {
 
         <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <ImageDisplay label="Source Image" imageUrl={sourceImage.previewUrl} constrainHeight />
+                <ImageDisplay label={t('videoGenerator.sourceImage')} imageUrl={sourceImage.previewUrl} constrainHeight />
                 
                 <div className="w-full">
-                    <h2 className="text-lg font-semibold text-[var(--text-primary)] text-center mb-4">Generated Video</h2>
+                    <h2 className="text-lg font-semibold text-[var(--text-primary)] text-center mb-4">{t('videoGenerator.generatedVideo')}</h2>
                     <div className={`w-full bg-[var(--background-secondary)] rounded-lg shadow-lg flex items-center justify-center overflow-hidden border border-[var(--border-primary)] ${aspectRatio === '16:9' ? 'aspect-video' : 'aspect-[9/16]'}`}>
                         {isLoading ? (
                             <div className="p-4 text-center">
@@ -204,14 +211,14 @@ export const VideoGenerator: React.FC = () => {
                         ) : generatedVideoUrl ? (
                             <div className="relative w-full h-full group">
                                 <video src={generatedVideoUrl} controls autoPlay loop className="w-full h-full object-cover" />
-                                <a href={generatedVideoUrl} download={`ai-video-${Date.now()}.mp4`} className="absolute bottom-4 right-4 p-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all opacity-0 group-hover:opacity-100" title="Download Video">
+                                <a href={generatedVideoUrl} download={`ai-video-${Date.now()}.mp4`} className="absolute bottom-4 right-4 p-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all opacity-0 group-hover:opacity-100" title={t('videoGenerator.downloadVideo')}>
                                     <DownloadIcon className="w-5 h-5" />
                                 </a>
                             </div>
                         ) : (
                             <div className="text-[var(--text-secondary)] flex flex-col items-center p-4 text-center">
                                 <VideoIcon className="w-16 h-16" />
-                                <p className="mt-2">Your generated video will appear here</p>
+                                <p className="mt-2">{t('videoGenerator.videoAppearHere')}</p>
                             </div>
                         )}
                     </div>
@@ -226,7 +233,7 @@ export const VideoGenerator: React.FC = () => {
                     type="text"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="e.g., 'A cinematic shot of this car driving through a neon city'"
+                    placeholder={t('videoGenerator.promptPlaceholder')}
                     className="w-full bg-[var(--background-secondary)] border border-[var(--border-secondary)] rounded-lg py-3 pl-12 pr-4 text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:ring-2 focus:ring-[var(--accent-primary)] focus:border-[var(--accent-primary)] transition-colors"
                     disabled={isLoading}
                     />
@@ -237,11 +244,11 @@ export const VideoGenerator: React.FC = () => {
                     disabled={isLoading || !prompt.trim()}
                     className="w-full md:w-auto flex items-center justify-center gap-2 bg-[var(--accent-primary)] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[var(--accent-primary-hover)] disabled:bg-[var(--border-primary)] disabled:text-[var(--text-secondary)] disabled:cursor-not-allowed transition-colors"
                     >
-                    {isLoading ? 'Generating...' : 'Generate (100 Cr)'}
+                    {isLoading ? t('videoGenerator.generating') : t('videoGenerator.generate')}
                     </button>
                     <button
                     onClick={reset}
-                    title="Start Over with New Image"
+                    title={t('videoGenerator.startOver')}
                     className="p-3 bg-[var(--danger-primary)] text-white rounded-lg hover:bg-[var(--danger-primary-hover)] disabled:bg-gray-600 transition-colors"
                     disabled={isLoading}
                     >
@@ -252,7 +259,7 @@ export const VideoGenerator: React.FC = () => {
             
             {isSuggesting && (
                 <div className="text-center py-10 mt-8">
-                    <p className="text-[var(--text-secondary)] animate-pulse">Analyzing your image for ideas...</p>
+                    <p className="text-[var(--text-secondary)] animate-pulse">{t('videoGenerator.analyzing')}</p>
                 </div>
             )}
             {!isSuggesting && Object.keys(promptSuggestions).length > 0 && (

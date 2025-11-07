@@ -1,61 +1,89 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ThemeControls } from './ThemeControls';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { BackgroundControls } from './BackgroundControls';
-import { SettingsIcon, SparklesIcon } from './IconComponents';
+import { PromptStyleSwitcher } from './PromptStyleSwitcher';
+import { SettingsIcon, ArrowRightIcon } from './IconComponents';
+import { View } from '../App';
 import { useTheme } from '../contexts/ThemeContext';
 
-export const SettingsPage: React.FC = () => {
-  const { promptStyle, togglePromptStyle } = useTheme();
+interface SettingsPageProps {
+    onNavigate: (view: View) => void;
+}
 
-  return (
-    <div className="max-w-4xl mx-auto px-2">
-      <div className="flex items-center justify-center gap-3 mb-8">
-        <SettingsIcon className="w-8 h-8 text-[var(--accent-primary)]" />
-        <h1 className="text-3xl font-bold text-[var(--text-primary)]">Settings</h1>
-      </div>
-      <div className="space-y-8">
-        <div className="bg-[var(--background-secondary)]/50 backdrop-blur-sm border border-[var(--border-primary)] rounded-2xl p-6 shadow-xl">
-          <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4 text-center md:text-left">Theme & Appearance</h2>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <ThemeControls />
-          </div>
-        </div>
+export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
+    const { t } = useTranslation();
+    const { appIcons, appIcon, setAppIcon } = useTheme();
 
-        <div className="bg-[var(--background-secondary)]/50 backdrop-blur-sm border border-[var(--border-primary)] rounded-2xl p-6 shadow-xl">
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4 text-center md:text-left">Prompt Style</h2>
-            <div className="flex items-center justify-between max-w-sm mx-auto">
-                 <label htmlFor="prompt-style-toggle" className="text-lg font-medium text-[var(--text-primary)] cursor-pointer select-none flex items-center gap-3" title="Toggle Neon Prompt Styles">
-                    <SparklesIcon className="w-6 h-6 text-purple-400" />
-                    <span>Neon Prompts</span>
-                </label>
-                <button
-                    id="prompt-style-toggle"
-                    onClick={togglePromptStyle}
-                    role="switch"
-                    aria-checked={promptStyle === 'neon'}
-                    className={`relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)] focus:ring-offset-2 focus:ring-offset-[var(--background-secondary)] ${
-                        promptStyle === 'neon' ? 'bg-[var(--accent-primary)]' : 'bg-[var(--border-primary)]'
-                    }`}
-                >
-                    <span
-                        aria-hidden="true"
-                        className={`inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                            promptStyle === 'neon' ? 'translate-x-5' : 'translate-x-0'
-                        }`}
-                    />
-                </button>
+    return (
+        <div className="max-w-3xl mx-auto">
+             <div className="flex items-center justify-center gap-3 mb-10">
+                <SettingsIcon className="w-8 h-8 text-[var(--accent-primary)]" />
+                <h1 className="text-3xl font-bold text-[var(--text-primary)]">{t('settings.title')}</h1>
             </div>
-             <p className="text-sm text-[var(--text-secondary)]/80 mt-3 text-center max-w-sm mx-auto">Toggle to apply a vibrant, glowing neon style to prompt suggestion buttons.</p>
+
+            <div className="space-y-8">
+                <div className="bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-xl p-6 shadow-lg">
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">{t('settings.appearance')}</h2>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <label className="text-[var(--text-primary)]">{t('settings.theme')}</label>
+                            <ThemeControls />
+                        </div>
+                         <div className="flex items-center justify-between">
+                            <label className="text-[var(--text-primary)]">{t('settings.backgroundStyle')}</label>
+                            <BackgroundControls />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <label className="text-[var(--text-primary)]">{t('settings.neonPrompts')}</label>
+                            <PromptStyleSwitcher />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-xl p-6 shadow-lg">
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">{t('settings.appIcon')}</h2>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 mt-4">
+                        {appIcons.map((icon) => (
+                            <button
+                                key={icon.name}
+                                onClick={() => setAppIcon(icon.name)}
+                                className={`relative rounded-lg p-2 transition-all duration-200 aspect-square flex flex-col items-center justify-center gap-2
+                                    ${appIcon.name === icon.name 
+                                        ? 'ring-2 ring-offset-2 ring-offset-[var(--background-secondary)] ring-[var(--accent-primary)]' 
+                                        : 'bg-[var(--background-tertiary)] hover:bg-[var(--border-primary)]'
+                                    }`}
+                            >
+                                <div dangerouslySetInnerHTML={{ __html: icon.svg }} className="w-16 h-16 icon-shadow" />
+                                <span className="text-xs text-center text-[var(--text-secondary)] mt-1">{icon.name}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-xl p-6 shadow-lg">
+                     <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">{t('settings.language')}</h2>
+                    <div className="flex items-center justify-between">
+                        <label className="text-[var(--text-primary)]">{t('settings.selectLanguage')}</label>
+                        <LanguageSwitcher />
+                    </div>
+                </div>
+
+                <div className="bg-[var(--background-secondary)] border border-[var(--border-primary)] rounded-xl p-6 shadow-lg">
+                     <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">{t('settings.legal')}</h2>
+                    <div className="space-y-3">
+                        <button onClick={() => onNavigate('privacy')} className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-[var(--border-primary)] transition-colors">
+                            <span className="text-[var(--text-primary)]">{t('settings.privacyPolicy')}</span>
+                            <ArrowRightIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        </button>
+                        <button onClick={() => onNavigate('dataDeletion')} className="w-full flex justify-between items-center p-3 rounded-lg hover:bg-[var(--border-primary)] transition-colors">
+                             <span className="text-[var(--text-primary)]">{t('settings.dataDeletion')}</span>
+                            <ArrowRightIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div className="bg-[var(--background-secondary)]/50 backdrop-blur-sm border border-[var(--border-primary)] rounded-2xl p-6 shadow-xl">
-          <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4 text-center md:text-left">Background Style</h2>
-           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <p className="text-[var(--text-secondary)]">Select a dynamic background for the app:</p>
-            <BackgroundControls />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
